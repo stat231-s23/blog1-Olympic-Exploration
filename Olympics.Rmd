@@ -23,6 +23,9 @@ athletes <- athletes %>%
 # Convert the medal type column to a factor variable
 athletes$Medal <- factor(athletes$Medal)
 
+# Remove any rows with missing values
+athletes <- athletes[complete.cases(athletes), ]
+
 # Filter out non-numeric variables
 athletes_numeric <- athletes %>%
   select_if(is.numeric)
