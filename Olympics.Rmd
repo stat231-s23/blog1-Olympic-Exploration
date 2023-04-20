@@ -13,5 +13,37 @@ library(htmltools)
 athletes <- read_csv("athlete_events.csv")
 noc <- read_csv("noc_regions.csv")
 
+
+
+#KMEANS CLUSTERING FOR MEDALS
+
+athletes <- athletes %>% 
+  filter(!is.na(Medal))
+
+# Convert the medal type column to a factor variable
+athletes$Medal <- factor(athletes$Medal)
+
+# Filter out non-numeric variables
+athletes_numeric <- athletes %>%
+  select_if(is.numeric)
+
+# Scale the numeric variables
+athletes_scaled <- scale(athletes_numeric)
+
+# Combine the scaled variables with the "Medal" column
+athletes_scaled <- cbind(athletes_scaled, athletes["Medal"])
+
+# Perform K-means clustering with k = 3 (one for each medal type)
+set.seed(123)
+kmeans_result <- kmeans(athletes_scaled, centers = 3)
+
+# Add the cluster labels to the original data
+athletes$cluster <- kmeans_result$cluster
+
+# Visualize the clusters using ggplot
+ggplot(athletes, aes(x = variable_1, y = variable_2, color = factor(cluster))) +
+  geom_point() +
+  labs(title = "K-means Clustering for Medal Types", x = "Variable 1", y = "Variable 2", color = "Cluster")
+
 ```
 
