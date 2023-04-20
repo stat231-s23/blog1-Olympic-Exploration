@@ -1,0 +1,17 @@
+```{r}
+library(readr)
+library(lubridate)
+library(janitor)
+library(tidyr)
+library(dplyr)
+library(tidyverse)
+library(kableExtra)
+library(tinytex)
+library(htmltools)
+
+
+athletes <- read_csv("athlete_events.csv")
+noc <- read_csv("noc_regions.csv")
+
+```
+
