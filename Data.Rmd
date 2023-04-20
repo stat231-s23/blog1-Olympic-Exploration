@@ -15,6 +15,9 @@ noc <- read_csv("noc_regions.csv")
 dictionary <- read_csv("dictionary.csv")
 summer <- read_csv("summer.csv")
 winter <- read_csv("winter.csv")
+gdp <- read_csv("gdp_1960_2020.csv")
+population <- read_csv("population_total_long.csv")
+
 
 ```
 
