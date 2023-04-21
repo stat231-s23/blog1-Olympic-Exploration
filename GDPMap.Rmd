@@ -1,0 +1,70 @@
+```{r}
+library(readr)
+library(lubridate)
+library(janitor)
+library(tidyr)
+library(dplyr)
+library(tidyverse)
+library(kableExtra)
+library(tidyverse)
+library(sf)
+library(viridis)
+library(ggplot2)
+library(leaflet)
+
+
+gdp <- read_csv("gdp_1960_2020.csv")
+population <- read_csv("population_total_long.csv")
+
+gdp <- rename(gdp, Country = country, Year = year)
+population <- rename(population, Country = 'Country Name')
+
+gdp <- gdp %>%
+  mutate(Country = ifelse(Country == "the United States", "United States", Country)) %>%
+  filter(Year >= 1960 & Year <= 2017)
+
+#unique(gdp$Country)
+#unique(population$Country)
+
+gdp_not_in_pop <- anti_join(gdp, population, by = "Country")
+
+#unique(gdp_not_in_pop$Country)
+
+pop_not_in_gdp <- anti_join(population, gdp, by = "Country")
+
+#unique(pop_not_in_gdp$Country)
+
+gdp <- gdp %>%
+  filter(!(Country %in% gdp_not_in_pop$Country))
+
+population <- population %>% 
+  filter(!(Country %in% pop_not_in_gdp$Country))
+
+
+gdp_year <- gdp %>% 
+  filter(Year == 2010)
+
+
+gdp_pop <- inner_join(gdp_year, population, by = c("Country", "Year"))
+
+
+world_map <- map_data("world")
+
+
+
+# create a ggplot object
+ggplot(gdp_pop, aes(map_id = Country)) +
+  # use a join to map countries to map data
+  geom_map(aes(fill = gdp), map = world_map) +
+  expand_limits(x = world_map$long, y = world_map$lat) +
+  # use scale_fill_gradient to map colors to values
+  scale_fill_gradient(low = "blue", high = "red") +
+  # add a title and caption
+  ggtitle("Per Capita GDP by Country") +
+  labs(caption = "Data source: World Bank") +
+  # remove legends and labels
+  theme_void()
+
+#need to work on showing GDP values for a given year and make it interactive? Or just show data for a given year
+# need to make one for population
+```
