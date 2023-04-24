@@ -1,0 +1,44 @@
+```{r, fig.height=8}
+library(readr)
+library(lubridate)
+library(janitor)
+library(tidyr)
+library(dplyr)
+library(tidyverse)
+library(kableExtra)
+library(tinytex)
+library(htmltools)
+
+
+athletes <- read_csv("athlete_events.csv")
+noc <- read_csv("noc_regions.csv")
+gdp <- read_csv("gdp_1960_2020.csv")
+population <- read_csv("population_total_long.csv")
+
+
+medals <- athletes %>%
+  filter(!is.na(Medal))%>%
+  group_by(NOC, Games)%>%
+  summarise(
+    Gold = sum(Medal == "Gold"),
+    Silver = sum(Medal == "Silver"),
+    Bronze = sum(Medal == "Bronze"))%>%
+  inner_join(noc)%>%
+  select(region, Games, Gold, Silver, Bronze)
+
+usamedals <- medals %>%
+  filter(region == "USA")%>%
+  pivot_longer(cols = c(Gold, Silver, Bronze), names_to = "Type", values_to = "Count")%>%
+  separate(Games, into = c("Year", "Season"), sep = " ")
+
+ggplot(data = usamedals,
+       mapping = aes(x = Count, y = Games, color = Type)) +
+  geom_point() +
+  geom_line()
+
+
+
+
+  
+```
+
