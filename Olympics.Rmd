@@ -38,29 +38,43 @@ athletes_numeric <- athletes %>%
 # Scale the numeric variables
 athletes_scaled <- scale(athletes_numeric)
 
+# K-means clustering for height and weight
+set.seed(123) # for reproducibility
+k <- 3 # number of clusters
+kmeans_fit <- kmeans(athletes_scaled[,c("Height", "Weight")], centers = k)
+
+# Add the cluster labels to the original dataset
+athletes$cluster <- as.factor(kmeans_fit$cluster)
+
+# Plot the clusters with medal color
+ggplot(athletes, aes(x=Height, y=Weight, color=Medal, shape=cluster)) + 
+  geom_point(size=3) +
+  scale_color_manual(values=c("gold3", "gray88", "burlywood4")) +
+  labs(title="K-means Clustering for Athletes", x="Height (scaled)", y="Weight (scaled)")
+
 # Combine the scaled variables with the "Medal" column
 # athletes_scaled <- cbind(athletes_scaled, athletes["Medal"])
 
-# Perform K-means clustering with k = 3 (one for each medal type)
-set.seed(123)
-kmeans_result <- kmeans(athletes_scaled, centers = 3)
-
-# Add the cluster labels to the original data
-athletes$cluster <- kmeans_result$cluster
-
-# Create a bar chart of medal counts
-athletes_grouped <- athletes %>%
-  group_by(medalInd) %>%
-  summarize(count = sum(medalInd)/medalInd) %>%
-  unique()
-
-ggplot(athletes_grouped, aes(x = medalInd, y = count, fill = as.factor(medalInd))) +
-  geom_bar(stat = "identity") +
-  xlab("Medal") +
-  ylab("Count") +
-  ggtitle("Distribution of Medals") +
-  scale_fill_manual(values = c("gold3", "gray88", "burlywood4"))
-  theme_economist()
+# # Perform K-means clustering with k = 3 (one for each medal type)
+# set.seed(123)
+# kmeans_result <- kmeans(athletes_scaled, centers = 3)
+# 
+# # Add the cluster labels to the original data
+# athletes$cluster <- kmeans_result$cluster
+# 
+# # Create a bar chart of medal counts
+# athletes_grouped <- athletes %>%
+#   group_by(medalInd) %>%
+#   summarize(count = sum(medalInd)/medalInd) %>%
+#   unique()
+# 
+# ggplot(athletes_grouped, aes(x = medalInd, y = count, fill = as.factor(medalInd))) +
+#   geom_bar(stat = "identity") +
+#   xlab("Medal") +
+#   ylab("Count") +
+#   ggtitle("Distribution of Medals") +
+#   scale_fill_manual(values = c("gold3", "gray88", "burlywood4"))
+#   theme_economist()
 
 
 # # Visualize the clusters using ggplot
