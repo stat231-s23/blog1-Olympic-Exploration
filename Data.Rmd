@@ -18,5 +18,10 @@ gdp <- read_csv("gdp_1960_2020.csv")
 population <- read_csv("population_total_long.csv")
 
 
+Diving <- summer %>%
+  filter(Discipline == "Diving")%>%
+  filter(Event != grepl("Summer", Games))
+
+
 ```
 
