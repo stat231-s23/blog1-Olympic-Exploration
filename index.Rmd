@@ -24,6 +24,7 @@ library(ggplot2)
 library(DT)
 library(ggrepel)
 library(ggthemes)
+library(plotly)
 
 ```
 
@@ -33,6 +34,8 @@ all_medals <- readRDS("ALL_medals.rds") %>%
   filter(NOC == "USA") %>%
   ungroup() %>%
   select(-NOC, -region)
+
+map_data_gdp <- readRDS("map_data_gdp.rds")
   
 
 ```
@@ -65,6 +68,27 @@ dygraph(all_medals, main = "USA Medals ") %>%
   dySeries("Bronze", label = "Bronze", color = "brown") %>%
   dyRangeSelector(height = 20)
 
+```
+
+```{r}
+#GDP map 2010
+ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = gdp)) +
+  geom_polygon(color = "black") +
+  scale_fill_viridis(option = "magma", direction = -1) + 
+  ggtitle("GDP by Country in 2010") +
+  theme_void()
+
+#Population Map 2010
+ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = Count)) +
+  geom_polygon(color = "black") +
+  scale_fill_viridis(option = "mako", direction = -1) + 
+  ggtitle("Country Populations in 2010") +
+  theme_void()
+
+#GDP Map 1960
+
+
+#Population Map 1960
 ```
 
 
