@@ -25,15 +25,25 @@ library(DT)
 library(ggrepel)
 library(ggthemes)
 library(plotly)
+library(readr)
+library(lubridate)
+library(janitor)
+library(tidyr)
+library(dplyr)
+library(tidyverse)
+library(kableExtra)
+library(tidyverse)
+library(sf)
+library(viridis)
+library(ggplot2)
+library(leaflet)
+library(maps)
 
 ```
 
 ```{r}
 #Import data
-all_medals <- readRDS("ALL_medals.rds") %>%
-  filter(NOC == "USA") %>%
-  ungroup() %>%
-  select(-NOC, -region)
+all_medals <- readRDS("ALL_medals.rds") 
 
 map_data_gdp <- readRDS("map_data_gdp.rds")
 
@@ -73,7 +83,7 @@ dygraph(all_medals, main = "USA Medals ") %>%
 
 ```{r}
 p <- gdp_pop_2016 %>%
-  ggplot(aes(gdp, total_medals, size = Population )) +
+  ggplot(aes(gdp, Total, size = Population )) +
   geom_point()+
   labs(
       title = "2016 Olympics Data",

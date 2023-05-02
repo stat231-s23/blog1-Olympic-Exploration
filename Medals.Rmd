@@ -20,6 +20,7 @@ gdp_all <- readRDS("gdp_all.rds")%>%
   mutate(region = case_when(Country == "United States" ~ "USA", 
                             Country == "United Kingdom" ~ "UK",
                             T ~ Country))%>%
+  filter(Year == "2016")%>%
   select(Year, region, gdp)
 
 population2016 <- population %>%
@@ -31,24 +32,27 @@ names <- noc %>%
 
 medal_gdp <- athletes %>%
   filter(!is.na(Medal))%>%
-  group_by(NOC, Games)%>%
+  select(Name, NOC, Games, Sport, Event, Medal, Year)%>%
+  filter(Year == "2016")%>%
+  group_by(NOC, Games, Event, Medal)%>%
+  summarise(NOC = NOC,
+            Games= Games,
+            Event = Event,
+            Medal = Medal,
+            n=n())%>%
+  unique()%>%
   summarise(
     Gold = sum(Medal == "Gold"),
     Silver = sum(Medal == "Silver"),
     Bronze = sum(Medal == "Bronze"))%>%
   inner_join(noc)%>%
-  separate(Games, into = c("Year", "Season"), sep = " ")%>% 
-  select(NOC, Year, Gold, Silver, Bronze, region) %>%
-  inner_join(gdp_all, by = c("Year", "region"))%>%
-  group_by(region, Year) %>%
-  summarise(total_medals = sum(Gold, Silver, Bronze), gdp = gdp) %>%
-  unique()
-
-medal_gdp_2016 <- medal_gdp%>%
-  filter(Year == "2016")%>%
+  group_by(region)%>%
+  summarise(Total = sum(Gold)+sum(Silver)+sum(Bronze))%>%
+  inner_join(gdp_all, by = "region")%>%
   rename(Country = region)
 
-gdp_pop_medal_2016 <-medal_gdp_2016%>%
+
+gdp_pop_medal_2016 <-medal_gdp%>%
   inner_join(population2016, by = "Country")%>%
   rename(Year= Year.x, Population = Count)%>%
   select(-Year.y)
@@ -60,7 +64,15 @@ setdiff(unique(gdp_all$Country), medal_gdp$region)
 
 medals <- athletes %>%
   filter(!is.na(Medal))%>%
-  group_by(NOC, Games)%>%
+  select(Name, NOC, Games, Sport, Event, Medal, Year)%>%
+  group_by(NOC, Games, Event, Medal)%>%
+  summarise(NOC = NOC,
+            Games= Games,
+            Event = Event,
+            Medal = Medal,
+            n=n())%>%
+    unique()%>%
+  filter(NOC == "USA")%>%
   summarise(
     Gold = sum(Medal == "Gold"),
     Silver = sum(Medal == "Silver"),
@@ -70,26 +82,15 @@ medals <- athletes %>%
                            grepl("Winter", Games)~ 2))%>%
   separate(Games, into = c("Year", "Season"), sep = " ")%>% 
   mutate(time = make_date(year = Year, month = Month))%>% 
-  select(region, time, Gold, Silver, Bronze)
+  group_by(time)%>%
+  summarise(
+    Gold = sum(Gold),
+    Silver = sum(Silver),
+    Bronze = sum(Bronze)
+  )
 
 saveRDS(medals, file = "ALL_medals.rds")
 
-usamedals <- medals %>%
-  filter(region == "USA")%>%
-  pivot_longer(cols = c(Gold, Silver, Bronze), names_to = "Type", values_to = "Count")%>%
-  separate(Games, into = c("Year", "Season"), sep = " ")%>%
-  filter(Year >= 1992)%>%
-  mutate(Type = factor(Type, level = c("Gold", "Silver", "Bronze") ) )%>%
-  mutate(Month = case_when(grepl("Summer",Season) ~ 7, 
-                           grepl("Winter", Season)~ 2))
-
-  saveRDS(usamedals, file = "USA_Medals.rds")
-
-ggplot(data = usamedals, aes(x= Year, y = Count))+
-        facet_wrap(~Type)+
-        geom_col(aes(fill = Season), position = "dodge")+ 
-      labs(x="Year", y= "Count", title = " Medals")+
-   theme(axis.text.x = element_text(angle = 90))+ ylim(c(0,160))
 ```
 
 
