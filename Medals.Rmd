@@ -13,7 +13,7 @@ library(htmltools)
 athletes <- read_csv("athlete_events.csv")
 noc <- read_csv("noc_regions.csv")
 gdp <- read_csv("gdp_1960_2020.csv")
-population <- read_csv("population_total_long.csv")
+population <- readRDS("population.rds")
 
 gdp_all <- readRDS("gdp_all.rds")%>%
   mutate(Year = as.character(Year)) %>%
@@ -21,6 +21,9 @@ gdp_all <- readRDS("gdp_all.rds")%>%
                             Country == "United Kingdom" ~ "UK",
                             T ~ Country))%>%
   select(Year, region, gdp)
+
+population2016 <- population %>%
+  filter(Year == "2016")
 
 names <- noc %>%
   rename(Country = region)%>%
@@ -42,10 +45,15 @@ medal_gdp <- athletes %>%
   unique()
 
 medal_gdp_2016 <- medal_gdp%>%
-  filter(Year == "2016")
+  filter(Year == "2016")%>%
+  rename(Country = region)
 
-saveRDS(medal_gdp_2016, file = "2016_gdp.rds")
+gdp_pop_medal_2016 <-medal_gdp_2016%>%
+  inner_join(population2016, by = "Country")%>%
+  rename(Year= Year.x, Population = Count)%>%
+  select(-Year.y)
 
+saveRDS(gdp_pop_medal_2016, file = "2016_gdp_pop.rds")
 
 
 setdiff(unique(gdp_all$Country), medal_gdp$region)

@@ -37,7 +37,7 @@ all_medals <- readRDS("ALL_medals.rds") %>%
 
 map_data_gdp <- readRDS("map_data_gdp.rds")
 
-gdp_2016 <- readRDS("2016_gdp.rds")
+gdp_pop_2016 <- readRDS("2016_gdp_pop.rds")
 
 ```
 
@@ -72,9 +72,14 @@ dygraph(all_medals, main = "USA Medals ") %>%
 ```
 
 ```{r}
-p <- gdp_2016 %>%
-  ggplot(aes(gdp, total_medals)) +
-  geom_point()
+p <- gdp_pop_2016 %>%
+  ggplot(aes(gdp, total_medals, size = Population )) +
+  geom_point()+
+  labs(
+      title = "2016 Olympics Data",
+      subtitle = "GDP, Population, Total Medals",
+      y = "Total Medals at 2016 Games",
+      x = "GDP", color = "Airline")
 
 ggplotly(p)
 ```
