@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 ```{r}
 library(readr)
 library(lubridate)
@@ -11,60 +16,105 @@ library(sf)
 library(viridis)
 library(ggplot2)
 library(leaflet)
-
+library(maps)
 
 gdp <- read_csv("gdp_1960_2020.csv")
 population <- read_csv("population_total_long.csv")
+names <- read_csv("noc_regions.csv")
+athletes <- read_csv("athlete_events.csv")
 
 gdp <- rename(gdp, Country = country, Year = year)
 population <- rename(population, Country = 'Country Name')
 
 gdp <- gdp %>%
-  mutate(Country = ifelse(Country == "the United States", "United States", Country)) %>%
-  filter(Year >= 1960 & Year <= 2017)
+  mutate(Country = ifelse(Country == "the United States", "USA", Country)) #%>%
+ # filter(Year >= 1960 & Year <= 2017)
+
+population <- population %>%
+  mutate(Country = ifelse(Country == "United States", "USA", Country)) %>%
+  mutate(Country = ifelse(Country == "Venezuela, RB", "Venezuela", Country))
 
 #unique(gdp$Country)
 #unique(population$Country)
 
+#show which countries are in gdp that are not in pop
 gdp_not_in_pop <- anti_join(gdp, population, by = "Country")
 
 #unique(gdp_not_in_pop$Country)
 
+#show which countries are in pop that are not in gdp
 pop_not_in_gdp <- anti_join(population, gdp, by = "Country")
 
 #unique(pop_not_in_gdp$Country)
 
+#get rid of countries in the gdp dataset that are not in pop dataset
 gdp <- gdp %>%
   filter(!(Country %in% gdp_not_in_pop$Country))
 
+
+#get rid of countries in the pop dataset that are not in gdp dataset
 population <- population %>% 
   filter(!(Country %in% pop_not_in_gdp$Country))
 
+saveRDS(population, file = "population.rds")
 
+#only look at 2010 data, the most recent year possible in the conjoined dataset
 gdp_year <- gdp %>% 
   filter(Year == 2010)
 
+pop2010 <- population %>%
+  filter(Year == 2010)
 
+#join gdp and pop datasets by Country and Year
 gdp_pop <- inner_join(gdp_year, population, by = c("Country", "Year"))
-
 
 world_map <- map_data("world")
 
+map_data_gdp <- inner_join(world_map, gdp_pop, by = c("region" = "Country"))
+
+saveRDS(map_data_gdp, file = "map_data_gdp.rds")
+
+ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = gdp)) +
+  geom_polygon(color = "black") +
+  scale_fill_viridis(option = "magma", direction = -1) + 
+  ggtitle("GDP by Country in 2010") +
+  theme_void()
 
 
-# create a ggplot object
-ggplot(gdp_pop, aes(map_id = Country)) +
-  # use a join to map countries to map data
-  geom_map(aes(fill = gdp), map = world_map) +
-  expand_limits(x = world_map$long, y = world_map$lat) +
-  # use scale_fill_gradient to map colors to values
-  scale_fill_gradient(low = "blue", high = "red") +
-  # add a title and caption
-  ggtitle("Per Capita GDP by Country") +
-  labs(caption = "Data source: World Bank") +
-  # remove legends and labels
+ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = Count)) +
+  geom_polygon(color = "black") +
+  scale_fill_viridis(option = "mako", direction = -1) + 
+  ggtitle("Country Populations in 2010") +
   theme_void()
 
 #need to work on showing GDP values for a given year and make it interactive? Or just show data for a given year
 # need to make one for population
+```
+
+```{r}
+gdp_1970 <- gdp %>% 
+  filter(Year == 1970)
+
+pop1970 <- population %>%
+  filter(Year == 1970)
+
+#join gdp and pop datasets by Country and Year
+gdp_pop2 <- inner_join(gdp_1970, pop1970, by = c("Country", "Year"))
+
+map_data_gdp2 <- inner_join(world_map, gdp_pop2, by = c("region" = "Country"))
+
+saveRDS(map_data_gdp2, file = "map_data_gdp2.rds")
+
+ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = gdp)) +
+  geom_polygon(color = "black") +
+  scale_fill_viridis(option = "magma", direction = -1) + 
+  ggtitle("GDP by Country in 1970") +
+  theme_void()
+
+
+ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = Count)) +
+  geom_polygon(color = "black") +
+  scale_fill_viridis(option = "mako", direction = -1) + 
+  ggtitle("Country Populations in 1970") +
+  theme_void()
 ```
