@@ -1,7 +1,7 @@
 ---
-title: "Your Project Title Here"
-author: "Your team member names here"
-date: "Add a date"
+title: "Olympics"
+author: "Olivia DeVol, Nick Addison, Fritz Lalley"
+date: "May 2023"
 output:
   rmdformats::readthedown:
     highlight: "kate"
@@ -17,8 +17,31 @@ options(knitr.kable.NA = '')
 
 # Load packages
 library(tidyverse)
+library(dygraphs)
+library(shiny)
+library(shinythemes)
+library(ggplot2)
+library(DT)
+library(ggrepel)
+library(ggthemes)
 
 ```
+
+```{r}
+#Import data
+usa_medals <- readRDS("USA_Medals.rds")
+
+all_medals <- readRDS("ALL_medals.rds") %>%
+  filter(NOC == "USA") %>%
+  ungroup() %>%
+  select(-NOC, -region)
+
+all_medals <- readRDS("ALL_medals.rds")
+  
+
+
+```
+
 
 # Intro
 
@@ -32,24 +55,22 @@ This is an R Markdown blog template. This document will be knit to HTML to produ
 
 3. Commit and push changes when you are ready. The website may take a couple minutes to update automatically after the push, but you may need to clear your browser's cache or view the page in a private/incognito window to see the changes more quickly. 
 
-
-# Content
+# Test
 
 You can include text, `code`, and output as usual. Remember to take full advantage of Markdown and follow our [Style Guide](https://acstat231-f22.github.io/home/style-guide.html#Text_narration).
-
-```{r ggplot-example, fig.align="left", out.width="100%"}
-ggplot(data = cars, aes(x = speed, y = dist)) + 
-  geom_point() + 
-  labs(x = "Speed of car (mph)",
-       y = "Distance taken to stop (ft)",
-       title = "Stopping distance increases with faster speeds",
-       subtitle = "Based on 1920s study") +
-  theme_classic()
-```
 
 Examples and additional guidance are provided below. 
 
 Take note of the the default code chunk options in the `setup` code chunk. For example, unlike the rest of the Rmd files we worked in this semester, the default code chunk option is `echo = FALSE`, so you will need to set `echo  = TRUE` for any code chunks you would like to display in the blog. You should be thoughtful and intentional about the code you choose to display. 
+
+```{r}
+dygraph(all_medals, main = "USA Medals ") %>%
+  dySeries("Gold", label = "Gold", color = "gold") %>%
+  dySeries("Silver", label = "Silver", color = "grey") %>%
+  dySeries("Bronze", label = "Bronze", color = "brown") %>%
+  dyRangeSelector(height = 20)
+
+```
 
 
 ## Links 

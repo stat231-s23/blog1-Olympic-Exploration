@@ -15,6 +15,28 @@ noc <- read_csv("noc_regions.csv")
 gdp <- read_csv("gdp_1960_2020.csv")
 population <- read_csv("population_total_long.csv")
 
+gdp_all <- readRDS("gdp_all.rds")%>%
+  mutate(Year = as.character(Year)) %>%
+  mutate(region = case_when(Country == "United States"))
+  select(Year, Country, gdp)
+
+names <- noc %>%
+  rename(Country = region)%>%
+  select(NOC, Country)
+
+medal_gdp <- athletes %>%
+  filter(!is.na(Medal))%>%
+  group_by(NOC, Games)%>%
+  summarise(
+    Gold = sum(Medal == "Gold"),
+    Silver = sum(Medal == "Silver"),
+    Bronze = sum(Medal == "Bronze"))%>%
+  inner_join(noc)%>%
+  separate(Games, into = c("Year", "Season"), sep = " ")%>% 
+  select(NOC, Year, Gold, Silver, Bronze, region) %>%
+  inner_join(gdp_all, by = c("Year" = "Year", "region" = "Country"))
+
+setdiff(medal_gdp$region, unique(gdp_all$Country))
 
 medals <- athletes %>%
   filter(!is.na(Medal))%>%
@@ -24,14 +46,24 @@ medals <- athletes %>%
     Silver = sum(Medal == "Silver"),
     Bronze = sum(Medal == "Bronze"))%>%
   inner_join(noc)%>%
-  select(region, Games, Gold, Silver, Bronze)
+  mutate(Month = case_when(grepl("Summer", Games) ~ 7, 
+                           grepl("Winter", Games)~ 2))%>%
+  separate(Games, into = c("Year", "Season"), sep = " ")%>% 
+  mutate(time = make_date(year = Year, month = Month))%>% 
+  select(region, time, Gold, Silver, Bronze)
+
+saveRDS(medals, file = "ALL_medals.rds")
 
 usamedals <- medals %>%
   filter(region == "USA")%>%
   pivot_longer(cols = c(Gold, Silver, Bronze), names_to = "Type", values_to = "Count")%>%
   separate(Games, into = c("Year", "Season"), sep = " ")%>%
   filter(Year >= 1992)%>%
-  mutate(Type = factor(Type, level = c("Gold", "Silver", "Bronze") ) )
+  mutate(Type = factor(Type, level = c("Gold", "Silver", "Bronze") ) )%>%
+  mutate(Month = case_when(grepl("Summer",Season) ~ 7, 
+                           grepl("Winter", Season)~ 2))
+
+  saveRDS(usamedals, file = "USA_Medals.rds")
 
 ggplot(data = usamedals, aes(x= Year, y = Count))+
         facet_wrap(~Type)+
@@ -39,6 +71,10 @@ ggplot(data = usamedals, aes(x= Year, y = Count))+
       labs(x="Year", y= "Count", title = " Medals")+
    theme(axis.text.x = element_text(angle = 90))+ ylim(c(0,160))
 ```
+
+
+
+
 ```{r}
 russiamedals <- medals %>%
   filter(region == "Russia")%>%
@@ -54,6 +90,8 @@ ggplot(data = russiamedals, aes(x= Year, y = Count))+
    theme(axis.text.x = element_text(angle = 90))+ ylim(c(0,100))
 
 ```
+
+
 ```{r}
 germanymedals <- medals %>%
   filter(region == "Germany")%>%
