@@ -35,6 +35,7 @@ library(sf)
 library(viridis)
 library(leaflet)
 library(maps)
+library(mosaic)
 
 ```
 
@@ -44,6 +45,7 @@ all_medals <- readRDS("ALL_medals.rds")
 map_data_gdp <- readRDS("map_data_gdp.rds")
 map_data_gdp2 <- readRDS("map_data_gdp2.rds")
 gdp_pop_2016 <- readRDS("2016_gdp_pop.rds")
+athletes_medals <- readRDS("athletes_medals.rds")
 
 ```
 
@@ -135,6 +137,19 @@ mapplot4 <- ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = C
 
 ggplotly(mapplot4)
 ```
+
+
+
+```{r}
+ggplot(athletes_medals, aes(x = cluster, fill = Medal)) +
+  labs(title="K-means Clustering for Athletes", x="Cluster", y="Count")+
+  scale_fill_manual(values=c("gold3", "gray88", "burlywood4")) +
+  geom_bar()
+  
+mosaic::favstats(Height ~ cluster, data = athletes_medals)
+mosaic::favstats(Weight ~ cluster, data = athletes_medals)
+```
+
 
 
 ## Links 

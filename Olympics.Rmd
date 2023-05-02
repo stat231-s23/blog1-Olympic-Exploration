@@ -9,6 +9,7 @@ library(kableExtra)
 library(tinytex)
 library(htmltools)
 library(ggthemes)
+library(mosaic)
 
 athletes <- read_csv("athlete_events.csv")
 noc <- read_csv("noc_regions.csv")
@@ -31,6 +32,7 @@ athletes <- athletes %>%
 # Remove any rows with missing values
 athletes <- athletes[complete.cases(athletes), ]
 
+
 # Filter out non-numeric variables
 athletes_numeric <- athletes %>%
   select_if(is.numeric)
@@ -44,7 +46,13 @@ k <- 3 # number of clusters
 kmeans_fit <- kmeans(athletes_scaled[,c("Height", "Weight")], centers = k)
 
 # Add the cluster labels to the original dataset
-athletes$cluster <- as.factor(kmeans_fit$cluster)
+athletes$cluster <- as.factor(kmeans_fit$cluster)%>%
+    
+athletes_medals <- athletes %>%
+  mutate(Medal = factor(Medal, level = c("Gold", "Silver", "Bronze")))
+
+saveRDS(athletes_medals, file = "athletes_medals.rds")
+  
 
 # Plot the clusters with medal color
 ggplot(athletes, aes(x=Height, y=Weight, color=Medal, shape=cluster)) + 
@@ -53,11 +61,13 @@ ggplot(athletes, aes(x=Height, y=Weight, color=Medal, shape=cluster)) +
   labs(title="K-means Clustering for Athletes", x="Height (scaled)", y="Weight (scaled)")
   theme_economist()
   
-ggplot(athletes, aes(x = cluster, fill = Medal)) +
+ggplot(athletes_medals, aes(x = cluster, fill = Medal)) +
+  labs(title="K-means Clustering for Athletes", x="Cluster", y="Count")+
+  scale_fill_manual(values=c("gold3", "gray88", "burlywood4")) +
   geom_bar()
   
-mosaic::favstats(Height ~ cluster, data = athletes)
-mosaic::favstats(Weight ~ cluster, data = athletes)
+mosaic::favstats(Height ~ cluster, data = athletes_medals)
+mosaic::favstats(Weight ~ cluster, data = athletes_medals)
 
 ```
 
