@@ -52,36 +52,12 @@ ggplot(athletes, aes(x=Height, y=Weight, color=Medal, shape=cluster)) +
   scale_color_manual(values=c("gold3", "gray88", "burlywood4")) +
   labs(title="K-means Clustering for Athletes", x="Height (scaled)", y="Weight (scaled)")
   theme_economist()
-
-# Combine the scaled variables with the "Medal" column
-# athletes_scaled <- cbind(athletes_scaled, athletes["Medal"])
-
-# # Perform K-means clustering with k = 3 (one for each medal type)
-# set.seed(123)
-# kmeans_result <- kmeans(athletes_scaled, centers = 3)
-# 
-# # Add the cluster labels to the original data
-# athletes$cluster <- kmeans_result$cluster
-# 
-# # Create a bar chart of medal counts
-# athletes_grouped <- athletes %>%
-#   group_by(medalInd) %>%
-#   summarize(count = sum(medalInd)/medalInd) %>%
-#   unique()
-# 
-# ggplot(athletes_grouped, aes(x = medalInd, y = count, fill = as.factor(medalInd))) +
-#   geom_bar(stat = "identity") +
-#   xlab("Medal") +
-#   ylab("Count") +
-#   ggtitle("Distribution of Medals") +
-#   scale_fill_manual(values = c("gold3", "gray88", "burlywood4"))
-#   theme_economist()
-
-
-# # Visualize the clusters using ggplot
-# ggplot(athletes, aes(x = variable_1, y = variable_2, color = factor(cluster))) +
-#   geom_point() +
-#   labs(title = "K-means Clustering for Medal Types", x = "Variable 1", y = "Variable 2", color = "Cluster")
+  
+ggplot(athletes, aes(x = cluster, fill = Medal)) +
+  geom_bar()
+  
+mosaic::favstats(Height ~ cluster, data = athletes)
+mosaic::favstats(Weight ~ cluster, data = athletes)
 
 ```
 
