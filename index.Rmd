@@ -29,16 +29,11 @@ library(ggthemes)
 
 ```{r}
 #Import data
-usa_medals <- readRDS("USA_Medals.rds")
-
 all_medals <- readRDS("ALL_medals.rds") %>%
   filter(NOC == "USA") %>%
   ungroup() %>%
   select(-NOC, -region)
-
-all_medals <- readRDS("ALL_medals.rds")
   
-
 
 ```
 
