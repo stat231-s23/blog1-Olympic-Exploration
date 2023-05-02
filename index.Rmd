@@ -36,7 +36,8 @@ all_medals <- readRDS("ALL_medals.rds") %>%
   select(-NOC, -region)
 
 map_data_gdp <- readRDS("map_data_gdp.rds")
-  
+
+gdp_2016 <- readRDS("2016_gdp.rds")
 
 ```
 
@@ -69,6 +70,18 @@ dygraph(all_medals, main = "USA Medals ") %>%
   dyRangeSelector(height = 20)
 
 ```
+
+```{r}
+p <- gdp_2016 %>%
+  ggplot(aes(gdp, total_medals)) +
+  geom_point()
+
+ggplotly(p)
+```
+
+
+
+
 
 ```{r}
 #GDP map 2010

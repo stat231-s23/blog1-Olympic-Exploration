@@ -17,8 +17,10 @@ population <- read_csv("population_total_long.csv")
 
 gdp_all <- readRDS("gdp_all.rds")%>%
   mutate(Year = as.character(Year)) %>%
-  mutate(region = case_when(Country == "United States"))
-  select(Year, Country, gdp)
+  mutate(region = case_when(Country == "United States" ~ "USA", 
+                            Country == "United Kingdom" ~ "UK",
+                            T ~ Country))%>%
+  select(Year, region, gdp)
 
 names <- noc %>%
   rename(Country = region)%>%
@@ -34,9 +36,19 @@ medal_gdp <- athletes %>%
   inner_join(noc)%>%
   separate(Games, into = c("Year", "Season"), sep = " ")%>% 
   select(NOC, Year, Gold, Silver, Bronze, region) %>%
-  inner_join(gdp_all, by = c("Year" = "Year", "region" = "Country"))
+  inner_join(gdp_all, by = c("Year", "region"))%>%
+  group_by(region, Year) %>%
+  summarise(total_medals = sum(Gold, Silver, Bronze), gdp = gdp) %>%
+  unique()
 
-setdiff(medal_gdp$region, unique(gdp_all$Country))
+medal_gdp_2016 <- medal_gdp%>%
+  filter(Year == "2016")
+
+saveRDS(medal_gdp_2016, file = "2016_gdp.rds")
+
+
+
+setdiff(unique(gdp_all$Country), medal_gdp$region)
 
 medals <- athletes %>%
   filter(!is.na(Medal))%>%
