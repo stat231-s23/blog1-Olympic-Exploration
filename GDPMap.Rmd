@@ -70,7 +70,7 @@ gdp_pop <- inner_join(gdp_year, population, by = c("Country", "Year"))
 
 world_map <- map_data("world")
 
-map_data_gdp <- inner_join(world_map, gdp_pop, by = c("region" = "Country"))
+map_data_gdp <- full_join(world_map, gdp_pop, by = c("region" = "Country"))
 
 saveRDS(map_data_gdp, file = "map_data_gdp.rds")
 
@@ -101,7 +101,7 @@ pop1970 <- population %>%
 #join gdp and pop datasets by Country and Year
 gdp_pop2 <- inner_join(gdp_1970, pop1970, by = c("Country", "Year"))
 
-map_data_gdp2 <- inner_join(world_map, gdp_pop2, by = c("region" = "Country"))
+map_data_gdp2 <- full_join(world_map, gdp_pop2, by = c("region" = "Country"))
 
 saveRDS(map_data_gdp2, file = "map_data_gdp2.rds")
 
