@@ -47,6 +47,9 @@ map_data_gdp2 <- readRDS("map_data_gdp2.rds")
 gdp_pop_2016 <- readRDS("2016_gdp_pop.rds")
 athletes_medals <- readRDS("athletes_medals.rds")
 
+table_info <- gdp_pop_2016%>%
+  select(Country, Total, gdp, Population)
+
 ```
 
 
@@ -94,6 +97,9 @@ p <- gdp_pop_2016 %>%
       x = "GDP")
 
 ggplotly(p)
+
+datatable(table_info, colnames = c('Country Name', 'Medal Count', 'GDP', 'Population'))
+
 ```
 
 

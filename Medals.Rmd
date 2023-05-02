@@ -59,6 +59,8 @@ gdp_pop_medal_2016 <-medal_gdp%>%
 
 saveRDS(gdp_pop_medal_2016, file = "2016_gdp_pop.rds")
 
+datatable(gdp_pop_medal_2016, class = 'cell-border stripe')
+
 
 setdiff(unique(gdp_all$Country), medal_gdp$region)
 
