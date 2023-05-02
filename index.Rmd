@@ -98,32 +98,40 @@ ggplotly(p)
 
 ```{r}
 #GDP map 2010
-ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = gdp)) +
+mapplot<- ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = gdp, text = region)) +
   geom_polygon(color = "black") +
   scale_fill_viridis(option = "magma", direction = -1) + 
   ggtitle("GDP by Country in 2010") +
   theme_void()
 
+ggplotly(mapplot)
+
 #Population Map 2010
-ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = Count)) +
+mapplot2 <- ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = Count, text = region)) +
   geom_polygon(color = "black") +
   scale_fill_viridis(option = "mako", direction = -1) + 
   ggtitle("Country Populations in 2010") +
   theme_void()
 
+ggplotly(mapplot2)
+
 #GDP Map 1960
-ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = gdp)) +
+mapplot3 <- ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = gdp, text = region)) +
   geom_polygon(color = "black") +
   scale_fill_viridis(option = "magma", direction = -1) + 
   ggtitle("GDP by Country in 1970") +
   theme_void()
 
+ggplotly(mapplot3)
+
 #Population Map 1960
-ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = Count)) +
+mapplot4 <- ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = Count, text = region)) +
   geom_polygon(color = "black") +
   scale_fill_viridis(option = "mako", direction = -1) + 
   ggtitle("Country Populations in 1970") +
   theme_void()
+
+ggplotly(mapplot4)
 ```
 
 
