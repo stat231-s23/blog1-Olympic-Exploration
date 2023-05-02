@@ -41,10 +41,8 @@ library(maps)
 ```{r}
 #Import data
 all_medals <- readRDS("ALL_medals.rds") 
-
 map_data_gdp <- readRDS("map_data_gdp.rds")
 map_data_gdp2 <- readRDS("map_data_gdp2.rds")
-
 gdp_pop_2016 <- readRDS("2016_gdp_pop.rds")
 
 ```
@@ -71,6 +69,8 @@ Examples and additional guidance are provided below.
 Take note of the the default code chunk options in the `setup` code chunk. For example, unlike the rest of the Rmd files we worked in this semester, the default code chunk option is `echo = FALSE`, so you will need to set `echo  = TRUE` for any code chunks you would like to display in the blog. You should be thoughtful and intentional about the code you choose to display. 
 
 ```{r}
+#usa medal time graph
+
 dygraph(all_medals, main = "USA Medals ") %>%
   dySeries("Gold", label = "Gold", color = "gold") %>%
   dySeries("Silver", label = "Silver", color = "grey") %>%
@@ -80,6 +80,8 @@ dygraph(all_medals, main = "USA Medals ") %>%
 ```
 
 ```{r}
+#2016 olympics example
+
 p <- gdp_pop_2016 %>%
   ggplot(aes(x = gdp, y = Total, size = Population, text = Country )) +
   geom_point()+
@@ -154,16 +156,7 @@ If you want to include dynamic visualizations or tables, you should explore your
 * [**visNetwork**](http://dataknowledge.github.io/visNetwork): Network graph visualization vis.js
 * [**sparkline**](https://github.com/htmlwidgets/sparkline): Small inline charts
 * [**threejs**](https://github.com/bwlewis/rthreejs): Interactive 3D graphics
-    
-You may embed a published Shiny app in your blog if useful, but be aware that there is a limited window size for embedded objects, which tends to makes the user experience of the app worse relative to a dedicated Shiny app page. Additionally, Shiny apps will go idle after a few minutes and have to be reloaded by the user, which may also affect the user experience. 
-
-Any Shiny apps embedded in your blog should be accompanied by the link to the published Shiny app (I did this using a figure caption in the code chunk below, but you don't have to incorporate the link in this way).
-
-```{r ds-salaries-app, out.width = "100%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Data Science Salaries Shiny App](https://bebailey.shinyapps.io/data-science-salaries)"}
-knitr::include_app("https://bebailey.shinyapps.io/data-science-salaries",
-                   height = "500px")
-```
-
+  
 
 ## Tables
 
