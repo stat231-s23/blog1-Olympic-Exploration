@@ -1,3 +1,8 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
 ```{r}
 library(readr)
 library(lubridate)
@@ -25,6 +30,10 @@ gdp <- gdp %>%
   mutate(Country = ifelse(Country == "the United States", "USA", Country)) #%>%
  # filter(Year >= 1960 & Year <= 2017)
 
+population <- population %>%
+  mutate(Country = ifelse(Country == "United States", "USA", Country)) %>%
+  mutate(Country = ifelse(Country == "Venezuela, RB", "Venezuela", Country))
+
 #unique(gdp$Country)
 #unique(population$Country)
 
@@ -51,6 +60,9 @@ population <- population %>%
 gdp_year <- gdp %>% 
   filter(Year == 2010)
 
+pop2010 <- population %>%
+  filter(Year == 2010)
+
 #join gdp and pop datasets by Country and Year
 gdp_pop <- inner_join(gdp_year, population, by = c("Country", "Year"))
 
@@ -61,31 +73,42 @@ map_data_gdp <- inner_join(world_map, gdp_pop, by = c("region" = "Country"))
 ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = gdp)) +
   geom_polygon(color = "black") +
   scale_fill_viridis(option = "magma", direction = -1) + 
-  ggtitle("Per Capita GDP by Country") +
-  labs(caption = "Data source: ??") +
+  ggtitle("GDP by Country in 2010") +
   theme_void()
 
 
 ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = Count)) +
   geom_polygon(color = "black") +
-  scale_fill_viridis(option = "turbo", direction = -1) + 
-  ggtitle("Country Populations") +
-  labs(caption = "Data source: ??") +
+  scale_fill_viridis(option = "mako", direction = -1) + 
+  ggtitle("Country Populations in 2010") +
   theme_void()
-
-# create a ggplot object
-#ggplot(gdp_pop, aes(geometry = geom)) +
-  # use a join to map countries to map data
- # geom_map(aes(fill = gdp), map = world_map) +
- # expand_limits(x = world_map$long, y = world_map$lat) +
-  # use scale_fill_gradient to map colors to values
- # scale_fill_gradient(low = "blue", high = "red") +
-  # add a title and caption
- # ggtitle("Per Capita GDP by Country") +
- # labs(caption = "Data source: World Bank") +
-  # remove legends and labels
- # theme_void()
 
 #need to work on showing GDP values for a given year and make it interactive? Or just show data for a given year
 # need to make one for population
+```
+
+```{r}
+gdp_1960 <- gdp %>% 
+  filter(Year == 1960)
+
+pop1960 <- population %>%
+  filter(Year == 1960)
+
+#join gdp and pop datasets by Country and Year
+gdp_pop2 <- inner_join(gdp_1960, pop1960, by = c("Country", "Year"))
+
+map_data_gdp2 <- inner_join(world_map, gdp_pop2, by = c("region" = "Country"))
+
+ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = gdp)) +
+  geom_polygon(color = "black") +
+  scale_fill_viridis(option = "magma", direction = -1) + 
+  ggtitle("GDP by Country in 1960") +
+  theme_void()
+
+
+ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = Count)) +
+  geom_polygon(color = "black") +
+  scale_fill_viridis(option = "mako", direction = -1) + 
+  ggtitle("Country Populations in 1960") +
+  theme_void()
 ```
