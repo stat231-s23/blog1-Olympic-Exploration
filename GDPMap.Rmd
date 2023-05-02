@@ -118,3 +118,30 @@ ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = Count)) +
   ggtitle("Country Populations in 1970") +
   theme_void()
 ```
+
+```{r}
+#countries <- read_csv("countries_of_the_world.csv")
+#countries <- rename(countries, Country = country, Year = year)
+
+gdp_pop_2016 <- readRDS("2016_gdp_pop.rds")
+
+medalperpop <- gdp_pop_2016 %>%
+  select(Country, Total, Population) %>%
+  summarise(
+    MedalsPerPopulation = Total/Population,
+    Country = Country
+  )
+
+map_data_gdp3 <- full_join(world_map, medalperpop, by = c("region" = "Country"))
+
+saveRDS(map_data_gdp, file = "map_data_gdp3.rds")
+
+mapplot5 <- ggplot(map_data_gdp3, aes(x = long, y = lat, group = group, fill = MedalsPerPopulation, text = region)) +
+  geom_polygon(color = "black") +
+  scale_fill_viridis(option = "magma", direction = -1) + 
+  ggtitle("Medals Vs. Population in 2016") +
+  theme_void()
+
+ggplotly(mapplot5)
+```
+
