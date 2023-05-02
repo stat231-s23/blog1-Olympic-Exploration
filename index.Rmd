@@ -81,7 +81,7 @@ dygraph(all_medals, main = "USA Medals ") %>%
 
 ```{r}
 p <- gdp_pop_2016 %>%
-  ggplot(aes(gdp, Total, size = Population )) +
+  ggplot(aes(x = gdp, y = Total, size = Population, text = Country )) +
   geom_point()+
   labs(
       title = "2016 Olympics Data",
@@ -195,7 +195,7 @@ summary(cars) %>%
 Images and gifs can be displayed using code chunks:
 
 ```{r, fig.cap='"Safe Space" by artist Kenesha Sneed', out.width="80%", fig.align="center"}
-knitr::include_graphics("img/Kenesha-Sneed_safe-space.jpeg")
+knitr::include_graphics("img/olympic_rings.jpeg")
 ```
 
 
