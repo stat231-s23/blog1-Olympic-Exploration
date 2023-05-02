@@ -56,6 +56,8 @@ gdp <- gdp %>%
 population <- population %>% 
   filter(!(Country %in% pop_not_in_gdp$Country))
 
+saveRDS(population, file = "population.rds")
+
 #only look at 2010 data, the most recent year possible in the conjoined dataset
 gdp_year <- gdp %>% 
   filter(Year == 2010)
@@ -90,30 +92,29 @@ ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = Count)) +
 ```
 
 ```{r}
-gdp_1960 <- gdp %>% 
-  filter(Year == 1960)
+gdp_1970 <- gdp %>% 
+  filter(Year == 1970)
 
-pop1960 <- population %>%
-  filter(Year == 1960)
+pop1970 <- population %>%
+  filter(Year == 1970)
 
 #join gdp and pop datasets by Country and Year
-gdp_pop2 <- inner_join(gdp_1960, pop1960, by = c("Country", "Year"))
+gdp_pop2 <- inner_join(gdp_1970, pop1970, by = c("Country", "Year"))
 
 map_data_gdp2 <- inner_join(world_map, gdp_pop2, by = c("region" = "Country"))
 
 saveRDS(map_data_gdp2, file = "map_data_gdp2.rds")
 
-
 ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = gdp)) +
   geom_polygon(color = "black") +
   scale_fill_viridis(option = "magma", direction = -1) + 
-  ggtitle("GDP by Country in 1960") +
+  ggtitle("GDP by Country in 1970") +
   theme_void()
 
 
 ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = Count)) +
   geom_polygon(color = "black") +
   scale_fill_viridis(option = "mako", direction = -1) + 
-  ggtitle("Country Populations in 1960") +
+  ggtitle("Country Populations in 1970") +
   theme_void()
 ```
