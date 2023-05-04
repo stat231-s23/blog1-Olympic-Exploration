@@ -18,8 +18,6 @@ options(knitr.kable.NA = '')
 # Load packages
 library(tidyverse)
 library(dygraphs)
-library(shiny)
-library(shinythemes)
 library(ggplot2)
 library(DT)
 library(ggthemes)
@@ -151,6 +149,41 @@ mosaic::favstats(Height ~ cluster, data = athletes_medals)
 mosaic::favstats(Weight ~ cluster, data = athletes_medals)
 ```
 
+Fritz explain your findings...
+
+
+## Conclusion
+
+write a conclusion
+
+
+
+## References
+
+```{r}
+citation("plotly")
+```
+
+
+
+Xie Y, Cheng J, Tan X (2022). "DT: A Wrapper of the JavaScript Library 'DataTables'," R package version 0.24, available at <https://CRAN.R-project.org/package=DT>.
+
+Xie Y, Cheng J, Tan X (2023). _DT: A Wrapper of the JavaScript Library 'DataTables'_. R package version 0.27,
+  <https://CRAN.R-project.org/package=DT>.
+  
+   Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R, Grolemund G, Hayes A, Henry L, Hester J, Kuhn
+  M, Pedersen TL, Miller E, Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K, Vaughan D,
+  Wilke C, Woo K, Yutani H (2019). “Welcome to the tidyverse.” _Journal of Open Source Software_, *4*(43), 1686.
+  doi:10.21105/joss.01686 <https://doi.org/10.21105/joss.01686>.
+  
+  C. Sievert. Interactive Web-Based Data Visualization with R, plotly, and shiny. Chapman and Hall/CRC Florida,
+  2020.
+  
+
+
+
+
+
 
 
 
@@ -216,17 +249,6 @@ Images and gifs can be displayed using code chunks:
 ```{r, fig.cap='Olympic Rings', out.width="80%", fig.align="center"}
 knitr::include_graphics("img/olympic_rings.jpeg")
 ```
-
-
-```{r, fig.cap="This is a figure caption", out.width="50%", fig.align="center"}
-knitr::include_graphics("https://media.giphy.com/media/H7ZrrA9V2pd3Tehdds/giphy.gif")
-```
-
-You may also use Markdown syntax for displaying images as shown below, but code chunks offer easier customization of the image size and alignment.
-
-![This is another figure caption](https://media.giphy.com/media/8i5IvxP9ZLgmjXN1BF/giphy.gif)
-
-Either way, the file path can be a local path within your project directory or a URL for an image hosted online. This syntax works for PNG, PDF, JPG, and even GIF formats.
 
 ## Equations
 
