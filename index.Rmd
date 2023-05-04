@@ -22,7 +22,6 @@ library(shiny)
 library(shinythemes)
 library(ggplot2)
 library(DT)
-library(ggrepel)
 library(ggthemes)
 library(plotly)
 library(readr)
@@ -55,23 +54,10 @@ table_info <- gdp_pop_2016%>%
 
 # Intro
 
-This is an R Markdown blog template. This document will be knit to HTML to produce a webpage that will be hosted publicly via GitHub.
+We need to write an introduction.....
 
-## Website publication work flow
 
-1. Edit Rmd
-
-2. Knit to HTML to view progress. You may need to click "Open in Browser" for some content to show (sometimes content won't show until you actually push your changes to GitHub and view the published website).
-
-3. Commit and push changes when you are ready. The website may take a couple minutes to update automatically after the push, but you may need to clear your browser's cache or view the page in a private/incognito window to see the changes more quickly. 
-
-# Test
-
-You can include text, `code`, and output as usual. Remember to take full advantage of Markdown and follow our [Style Guide](https://acstat231-f22.github.io/home/style-guide.html#Text_narration).
-
-Examples and additional guidance are provided below. 
-
-Take note of the the default code chunk options in the `setup` code chunk. For example, unlike the rest of the Rmd files we worked in this semester, the default code chunk option is `echo = FALSE`, so you will need to set `echo  = TRUE` for any code chunks you would like to display in the blog. You should be thoughtful and intentional about the code you choose to display. 
+#USA Medal Analysis
 
 ```{r}
 #usa medal time graph
@@ -83,6 +69,8 @@ dygraph(all_medals, main = "USA Medals ") %>%
   dyRangeSelector(height = 20)
 
 ```
+
+The above medal time graph demonstrates the number of medals that the United States won each year that the Olympics were held. This allows us to see how the United States has performed at the Olympic stage. The graph has very sharp curves up and down which represent the medal differences between the summer and winter olympics. The USA tends to win more medals in the summer Olympics than the Winter olympics.
 
 ```{r}
 #2016 olympics example
@@ -231,27 +219,6 @@ You may also use Markdown syntax for displaying images as shown below, but code 
 
 Either way, the file path can be a local path within your project directory or a URL for an image hosted online. This syntax works for PNG, PDF, JPG, and even GIF formats.
 
-
-## Videos
-
-You can use code chunks or Markdown syntax include links to any valid YouTube or Vimeo URLs (see [here](https://bookdown.org/yihui/rmarkdown/learnr-videos.html) for details) or point to a location within your project directory. 
-
-Code chunk:
-
-```{r, out.width="80%", fig.align="center"}
-knitr::include_url("https://www.youtube.com/watch?v=up8ODGFWgFg")
-```
-
-Markdown syntax:
-
-![](https://www.youtube.com/watch?v=up8ODGFWgFg){width="90%"}
-
-
-You may need to push your updates to GitHub to see if the videos work.
-
-
-
-
 ## Equations
 
 You might include equations if part of the purpose of your blog is to explain a statistical method. There are two ways to include equations:
@@ -380,6 +347,8 @@ Columbia University has compiled some guidance on [how to cite data](https://gui
 You can list R package citations with the code `citation("packageName")` in the console and then copy (and reformat as needed) the relevant text, e.g.,
 ```{r}
 citation("DT")
+citation("tidyverse")
+
 ```
 
 The following citations are based on the American Statistical Association citation style (not all of these references are used in this document).:
