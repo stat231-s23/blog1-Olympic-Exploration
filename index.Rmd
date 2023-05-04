@@ -156,12 +156,17 @@ mosaic::favstats(Height ~ cluster, data = athletes_medals)
 mosaic::favstats(Weight ~ cluster, data = athletes_medals)
 ```
 
-Fritz explain your findings...
+This bar graph pulls from a dataset containing every Olympic medal winner in the competition's history(since data collection began). As you can see, the data is clustered. I clustered the data by height and weight, and measured the total medal count for each cluster, separated by the type of medal. 
+
+The goal here is to observe how height and weight may hold an impact on whether or not an athlete will be successful in the olympics. Evidently, the 1st and 3rd clusters observed the most medaling. From this, we can conclude that the highest third of athletes by height and weight are more likely to medal than other shorter and lighter athletes. In a similar vein, the lowest third of athletes by height and weight are more likely to medal than the middle third. 
+
+Similarly, we can observe individual types of medals across these three clusters. The same trend I described before is generally true for each type of medal, with the heaviest and tallest athletes winning the most gold, silver, and bronze medals. Though, the difference between the first two clusters is much less major. 
+
 
 
 ## Conclusion
 
-Fritz write a conclusion
+Evidently, we have chosen a quite broad discussion topic. While we are interested in looking at country specific trends relating to the olympics, such as our first graph where we observe medal count for just the United States, we are also dive into quite universal trends amongst athletes throughout the world, such as our graphs on GDP and height and weight. We 
 
 
 ## References
