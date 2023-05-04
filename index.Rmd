@@ -86,7 +86,7 @@ datatable(table_info, colnames = c('Country Name', 'Medal Count', 'GDP', 'Popula
 
 ```
 
-The above graph shows the relationship between a Country's GDP and the number of medals that they won at the 2016 Olympic games. There is a large cluster of countrys with low GDP and low medal count, as there are a lot of small countries that are not large medal winners. This graph shows that only two countries, namely the United States and China, are above the 50 medal count threshold. Consequently, those two countries have much greater GDP in comparison to other countries. The size of the points is related to that countries relative population. We can see that population is not as predictive of medal count as GDP is. This is because there are large and small points at both directions of the y axis (medal count). 
+The graph above depicts the relationship between a country's GDP and its medal count at the 2016 Olympic Games. It is evident that a significant cluster of countries with low GDP and low medal count exists, indicating that many small countries were not large medal winners. The data suggests that only two countries, the United States and China, managed to surpass the 50 medal count threshold, which correlates with their relatively high GDP. Additionally, the size of the points on the graph corresponds to a country's population, but it is clear that population is not as predictive of medal count as GDP. This is evident as there are large and small points at both ends of the y-axis (medal count).
 
 
 ## GDP and Population Country Maps (2010)
