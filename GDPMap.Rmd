@@ -128,15 +128,15 @@ gdp_pop_2016 <- readRDS("2016_gdp_pop.rds")
 medalperpop <- gdp_pop_2016 %>%
   select(Country, Total, Population) %>%
   summarise(
-    MedalsPerPopulation = Total/Population,
+    MedalsVsPopulation = Total/Population,
     Country = Country
   )
 
 map_data_gdp3 <- full_join(world_map, medalperpop, by = c("region" = "Country"))
 
-saveRDS(map_data_gdp, file = "map_data_gdp3.rds")
+saveRDS(map_data_gdp3, file = "map_data_gdp3.rds")
 
-mapplot5 <- ggplot(map_data_gdp3, aes(x = long, y = lat, group = group, fill = MedalsPerPopulation, text = region)) +
+mapplot5 <- ggplot(medalperpop, aes(x = long, y = lat, group = group, fill = MedalsVsPopulation, text = region)) +
   geom_polygon(color = "black") +
   scale_fill_viridis(option = "magma", direction = -1) + 
   ggtitle("Medals Vs. Population in 2016") +

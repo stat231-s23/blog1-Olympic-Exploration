@@ -41,6 +41,7 @@ library(mosaic)
 all_medals <- readRDS("ALL_medals.rds") 
 map_data_gdp <- readRDS("map_data_gdp.rds")
 map_data_gdp2 <- readRDS("map_data_gdp2.rds")
+map_data_gdp3 <- readRDS("map_data_gdp3.rds")
 gdp_pop_2016 <- readRDS("2016_gdp_pop.rds")
 athletes_medals <- readRDS("athletes_medals.rds")
 
@@ -115,23 +116,14 @@ mapplot2 <- ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = Co
 
 ggplotly(mapplot2)
 
-#GDP Map 1960
-mapplot3 <- ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = gdp, text = region)) +
+#Medals won in 2016 Olympics vs Population
+mapplot5 <- ggplot(map_data_gdp3, aes(x = long, y = lat, group = group, fill = MedalsVsPopulation, text = region)) +
   geom_polygon(color = "black") +
   scale_fill_viridis(option = "magma", direction = -1) + 
-  ggtitle("GDP by Country in 1970") +
+  ggtitle("Medals Vs. Population in 2016") +
   theme_void()
 
-ggplotly(mapplot3)
-
-#Population Map 1960
-mapplot4 <- ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = Count, text = region)) +
-  geom_polygon(color = "black") +
-  scale_fill_viridis(option = "mako", direction = -1) + 
-  ggtitle("Country Populations in 1970") +
-  theme_void()
-
-ggplotly(mapplot4)
+ggplotly(mapplot5)
 ```
 
 Nick needs to write a caption for this
