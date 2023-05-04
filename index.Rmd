@@ -24,6 +24,7 @@ library(ggthemes)
 library(plotly)
 library(viridis)
 library(mosaic)
+library(kableExtra)
 
 ```
 
@@ -89,8 +90,9 @@ datatable(table_info, colnames = c('Country Name', 'Medal Count', 'GDP', 'Popula
 The graph above depicts the relationship between a country's GDP and its medal count at the 2016 Olympic Games. It is evident that a significant cluster of countries with low GDP and low medal count exists, indicating that many small countries were not large medal winners. The data suggests that only two countries, the United States and China, managed to surpass the 50 medal count threshold, which correlates with their relatively high GDP. Additionally, the size of the points on the graph corresponds to a country's population, but it is clear that population is not as predictive of medal count as GDP. This is evident as there are large and small points at both ends of the y-axis (medal count).
 
 
-## GDP and Population Country Maps (2010)
+## GDP and Population Country Maps (2010) {.tabset}
 
+### GDP
 ```{r}
 #GDP map 2010
 mapplot<- ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = gdp, text = region)) +
@@ -102,9 +104,9 @@ mapplot<- ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = gdp,
 ggplotly(mapplot)
 
 ```
-
 This map displays Total GDP in 2010 for countries around the world. Lighter shades indicate a lower total GDP, while darker shades represent a higher GDP. Countries such as China, The United States of America, and Japan are among the countries with the highest Total GDP. Users can hover over the country of their choice to identify the country's name and its Total GDP.
 
+### Population
 ```{r}
 #Population Map 2010
 mapplot2 <- ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = Count, text = region)) +
@@ -118,6 +120,8 @@ ggplotly(mapplot2)
 ```
 
 This map displays populations for countries around the world in 2010. Lighter shades indicate a relatively low population, while dark shades indicate a relatively high population. China and India are among the countries with the highest total population by a considerable margin. Users can hover over the country of their choice to identify the country's name and its population.
+## {-}
+
 
 ## Population and Medals won in 2016 Olympics
 
@@ -136,7 +140,7 @@ This map displays the medals won in the 2016 Olympics versus the population of c
 
 
 
-## Athlete Medal Analysis 
+## Athlete Medal Analysis {.tabset}
 
 ```{r}
 ggplot(athletes_medals, aes(x = cluster, fill = Medal)) +
@@ -146,17 +150,22 @@ ggplot(athletes_medals, aes(x = cluster, fill = Medal)) +
 
 ```
   
-## Height   
+### Height   
 ```{r}  
-mosaic::favstats(Height ~ cluster, data = athletes_medals)
+mosaic::favstats(Height ~ cluster, data = athletes_medals)%>%
+  as.data.frame()%>%
+  kable(digits = 2)
 ```
 
-## Weight 
+### Weight 
 ```{r}  
-mosaic::favstats(Weight ~ cluster, data = athletes_medals)
+mosaic::favstats(Weight ~ cluster, data = athletes_medals)%>%
+  as.data.frame()%>%
+  kable(digits = 2)
 ```
+## {-}
 
-This bar graph pulls from a dataset containing every Olympic medal winner in the competition's history(since data collection began). As you can see, the data is clustered. I clustered the data by height and weight, and measured the total medal count for each cluster, separated by the type of medal. 
+This bar graph pulls from a dataset containing every Olympic medal winner in the competition's history (since data collection began). As you can see, the data is clustered. I clustered the data by height and weight, and measured the total medal count for each cluster, separated by the type of medal. 
 
 The goal here is to observe how height and weight may hold an impact on whether or not an athlete will be successful in the olympics. Evidently, the 1st and 3rd clusters observed the most medaling. From this, we can conclude that the highest third of athletes by height and weight are more likely to medal than other shorter and lighter athletes. In a similar vein, the lowest third of athletes by height and weight are more likely to medal than the middle third. 
 
@@ -208,6 +217,10 @@ Simon Garnier, Noam Ross, Robert Rudis, Antônio P. Camargo, Marco Sciaini, and 
 <!-- Mosaic Package -->  
 R. Pruim, D. T. Kaplan and N. J. Horton. The mosaic Package: Helping Students to 'Think with Data' Using R
   (2017). The R Journal, 9(1):77-102.
+
+<!-- KableExtra Package -->   
+Zhu H (2021). _kableExtra: Construct Complex Table with 'kable' and Pipe Syntax_. R package version 1.3.4,
+  <https://CRAN.R-project.org/package=kableExtra>.
 
 <!--  Athlete Dataset -->  
 Heesoo, K. (2017), "120 years of Olympic history: athletes and results" (Version 2), *Kaggle*, available at <https://www.kaggle.com/heesoo37/120-years-of-olympic-history-athletes-and-results>.
