@@ -57,7 +57,7 @@ table_info <- gdp_pop_2016%>%
 We need to write an introduction.....
 
 
-#USA Medal Analysis
+## USA Medal Exploration
 
 ```{r}
 #usa medal time graph
@@ -71,6 +71,8 @@ dygraph(all_medals, main = "USA Medals ") %>%
 ```
 
 The above medal time graph demonstrates the number of medals that the United States won each year that the Olympics were held. This allows us to see how the United States has performed at the Olympic stage. The graph has very sharp curves up and down which represent the medal differences between the summer and winter olympics. The USA tends to win more medals in the summer Olympics than the Winter olympics.
+
+## 2016 Olympic Data Analysis
 
 ```{r}
 #2016 olympics example
@@ -90,9 +92,11 @@ datatable(table_info, colnames = c('Country Name', 'Medal Count', 'GDP', 'Popula
 
 ```
 
+Olivia will explain this graph
 
 
 
+## GDP Country Maps
 
 ```{r}
 #GDP map 2010
@@ -132,7 +136,10 @@ mapplot4 <- ggplot(map_data_gdp2, aes(x = long, y = lat, group = group, fill = C
 ggplotly(mapplot4)
 ```
 
+Nick needs to write a caption for this
 
+
+## Athlete Medal Analysis 
 
 ```{r}
 ggplot(athletes_medals, aes(x = cluster, fill = Medal)) +
@@ -143,6 +150,8 @@ ggplot(athletes_medals, aes(x = cluster, fill = Medal)) +
 mosaic::favstats(Height ~ cluster, data = athletes_medals)
 mosaic::favstats(Weight ~ cluster, data = athletes_medals)
 ```
+
+
 
 
 
@@ -204,7 +213,7 @@ summary(cars) %>%
 
 Images and gifs can be displayed using code chunks:
 
-```{r, fig.cap='"Safe Space" by artist Kenesha Sneed', out.width="80%", fig.align="center"}
+```{r, fig.cap='Olympic Rings', out.width="80%", fig.align="center"}
 knitr::include_graphics("img/olympic_rings.jpeg")
 ```
 
