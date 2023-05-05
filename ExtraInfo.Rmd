@@ -164,8 +164,8 @@ Columbia University has compiled some guidance on [how to cite data](https://gui
 
 You can list R package citations with the code `citation("packageName")` in the console and then copy (and reformat as needed) the relevant text, e.g.,
 ```{r}
-citation("DT")
-citation("tidyverse")
+citation("kableExtra")
+
 
 ```
 
