@@ -127,11 +127,12 @@ This map displays populations for countries around the world in 2010. Lighter sh
 
 ```{r}
 #Medals won in 2016 Olympics vs Population
-mapplot5 <- ggplot(map_data_gdp3, aes(x = long, y = lat, group = group, fill = MedalsVsPopulation, text = region)) +
+mapplot5 <- ggplot(map_data_gdp3, aes(x = long, y = lat, group = group, fill = MedalsPer100000, text = region)) +
   geom_polygon(color = "black") +
-  scale_fill_viridis(option = "magma", direction = -1) + 
+  scale_fill_viridis(option = "plasma", direction = -1) + 
   ggtitle("Medals Vs. Population in 2016") +
-  theme_void()
+  theme_void() +
+  theme(legend.position = "bottom")
 
 ggplotly(mapplot5)
 ```
