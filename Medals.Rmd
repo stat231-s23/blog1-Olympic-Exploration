@@ -59,9 +59,6 @@ gdp_pop_medal_2016 <-medal_gdp%>%
 
 saveRDS(gdp_pop_medal_2016, file = "2016_gdp_pop.rds")
 
-datatable(gdp_pop_medal_2016, class = 'cell-border stripe')
-
-
 setdiff(unique(gdp_all$Country), medal_gdp$region)
 
 medals <- athletes %>%
@@ -99,34 +96,42 @@ saveRDS(medals, file = "ALL_medals.rds")
 
 
 ```{r}
-russiamedals <- medals %>%
-  filter(region == "Russia")%>%
-  pivot_longer(cols = c(Gold, Silver, Bronze), names_to = "Type", values_to = "Count")%>%
-  separate(Games, into = c("Year", "Season"), sep = " ")%>%
-  filter(Year >= 1992)%>%
-  mutate(Type = factor(Type, level = c("Gold", "Silver", "Bronze") ) )
+medals_sex <- athletes %>%
+  filter(!is.na(Medal))%>%
+  select(Name, NOC, Games, Sport, Event, Medal, Sex, Year)%>%
+  group_by(NOC, Games, Sex, Event, Medal)%>%
+  summarise(NOC = NOC,
+            Games= Games,
+            Event = Event,
+            Medal = Medal,
+            Sex = Sex,
+            n=n())%>%
+    unique()%>%
+  filter(NOC == "USA")%>%
+  summarise(
+    Gold = sum(Medal == "Gold"),
+    Silver = sum(Medal == "Silver"),
+    Bronze = sum(Medal == "Bronze"))%>%
+  mutate(Month = case_when(grepl("Summer", Games) ~ 7, 
+                           grepl("Winter", Games)~ 2))%>%
+  separate(Games, into = c("Year", "Season"), sep = " ")%>% 
+  mutate(time = make_date(year = Year, month = Month))%>% 
+  group_by(time, Sex)%>%
+  summarise(
+    Total = sum(Gold + Silver + Bronze)
+  )
 
-ggplot(data = russiamedals, aes(x= Year, y = Count))+
-        facet_wrap(~Type)+
-        geom_col(aes(fill = Season), position = "dodge")+ 
-      labs(x="Year", y= "Count", title = " Medals won by Russia")+
-   theme(axis.text.x = element_text(angle = 90))+ ylim(c(0,100))
+
+saveRDS(medals_sex, file = "medals_sex.rds")
 
 ```
 
 
 ```{r}
-germanymedals <- medals %>%
-  filter(region == "Germany")%>%
-  pivot_longer(cols = c(Gold, Silver, Bronze), names_to = "Type", values_to = "Count")%>%
-  separate(Games, into = c("Year", "Season"), sep = " ")%>%
-  filter(Year >= 1992)%>%
-  mutate(Type = factor(Type, level = c("Gold", "Silver", "Bronze") ) )
-
-ggplot(data = germanymedals, aes(x= Year, y = Count))+
-        facet_wrap(~Type)+
-        geom_col(aes(fill = Season), position = "dodge")+ 
-      labs(x="Year", y= "Count", title = " Medals")+
-   theme(axis.text.x = element_text(angle = 90))+ ylim(c(0,85))
+dygraph(medals_sex, main = "USA Medals by Sex ") %>%
+  dySeries("Gold", label = "Gold", color = "gold") %>%
+  dySeries("Silver", label = "Silver", color = "grey") %>%
+  dySeries("Bronze", label = "Bronze", color = "brown") %>%
+  dyRangeSelector(height = 20)
 ```
 
