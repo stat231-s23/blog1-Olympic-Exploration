@@ -191,13 +191,24 @@ select(-missing) %>%
 
 ## {-}
 
-This bar graph pulls from a dataset containing every Olympic medal winner in the competition's history (since data collection began). As you can see, the data is clustered. I clustered the data by height and weight, and measured the total medal count for each cluster, separated by the type of medal. 
+These bar graphs pull from a dataset containing every Olympic medal winner in the competition's history (since data collection began). As you can see, the data is clustered. I clustered the data by height and weight, and measured the total medal count for each cluster, separated by the type of medal. The first bargrah displays all athletss, where as the second bar graph only displays American athletes. 
 
-The goal here is to observe how height and weight may hold an impact on whether or not an athlete will be successful in the olympics. Evidently, the 3rd cluster observed the most medaling. From this, we can conclude that the middle third of athletes by height and weight are more likely to medal than the upper and lower thirds. In a similar vein, the lowest third of athletes by height and weight are more likely to medal than the highest third. Generally speaking, athletes in the middle ground in terms of height and wight have been, historically, more successful at the Olympics than others. 
+## All Athletes Clustered
+The goal here is to observe how height and weight may hold an impact on whether or not an athlete will be successful in the olympics. For the dataset containing all athletes, the 3rd cluster observed the most medaling. From this, we can conclude that the middle third of athletes by height and weight are more likely to medal than the upper and lower thirds. In a similar vein, the lowest third of athletes by height and weight are more likely to medal than the highest third. Generally speaking, athletes in the middle ground in terms of height and wight have been, historically, more successful at the Olympics than others. 
 
 Similarly, we can observe individual types of medals across these three clusters. The same trend I described before is generally true for each type of medal, with the middle ground height and weight athletes winning the most gold, silver, and bronze medals. Though, the difference between the first two clusters is much less major. 
 
+## American Athletes Clustered
 
+The same trend observed in the prior bar graph remains true here. For american athletes, the 1st cluster contains the most medaling. As before, this is the middle third of athletes clustered by height and weight. 
+
+Limiting the data to only include american athletes may give more credence to the initial observation that athletes who fall into that middle ground in terms of height and weight have historically been the most successful athletes. 
+
+Limitations:
+
+First off, different sports call for different types of physical builds. For example, a power lifter competing in the olympics needs to be big. On the contrary, a gymnast needs to be much lighter and lean, and in reality, they are often times much shorter as well. These physical traits give athletes competitive advantages in their own sports, therefore, it would be unfair to assert that one specific type of height and weight caters to the most success. Overall, that may be the case, however once you analyze these sports as individuals we see that these clusters don't give us as definitive results. 
+
+Similarly, we can not account for those athletes who compete as individuals versus those who compete as apart of a team. A gymnast, for example, competes as an individual. These athletes only rely on themselves for success during the competition. On the other hand, a basketball athlete relies on themselves as well as their teammates. Additionally, athletes on a team potentially fill certain physical builds that complement the builds of their teammates. On a basketball team, you will have a point-guard who are typically shorter and lighter along with a center who are typically taller and heavier. So, the fact that we are unable to distinguish between team athletes and individual athletes is another limitation of our k-means clustering analysis. 
 
 ## Conclusion
 
