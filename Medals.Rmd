@@ -10,12 +10,12 @@ library(tinytex)
 library(htmltools)
 library(imputeTS)
 
-
 athletes <- read_csv("athlete_events.csv")
 noc <- read_csv("noc_regions.csv")
 gdp <- read_csv("gdp_1960_2020.csv")
 population <- readRDS("population.rds")
 
+#Gdp from all years
 gdp_all <- readRDS("gdp_all.rds")%>%
   mutate(Year = as.character(Year)) %>%
   mutate(region = case_when(Country == "United States" ~ "USA", 
@@ -24,13 +24,16 @@ gdp_all <- readRDS("gdp_all.rds")%>%
   filter(Year == "2016")%>%
   select(Year, region, gdp)
 
+#creating 2016 population data set
 population2016 <- population %>%
   filter(Year == "2016")
 
+# Names of countries
 names <- noc %>%
   rename(Country = region)%>%
   select(NOC, Country)
 
+# initial data set with medal data
 medal_gdp <- athletes %>%
   filter(!is.na(Medal))%>%
   select(Name, NOC, Games, Sport, Event, Medal, Year)%>%
@@ -52,7 +55,7 @@ medal_gdp <- athletes %>%
   inner_join(gdp_all, by = "region")%>%
   rename(Country = region)
 
-
+#adding population to the gdp and medal data set
 gdp_pop_medal_2016 <-medal_gdp%>%
   inner_join(population2016, by = "Country")%>%
   rename(Year= Year.x, Population = Count)%>%
@@ -60,8 +63,7 @@ gdp_pop_medal_2016 <-medal_gdp%>%
 
 saveRDS(gdp_pop_medal_2016, file = "2016_gdp_pop.rds")
 
-setdiff(unique(gdp_all$Country), medal_gdp$region)
-
+#All medals data for first time series graph
 medals <- athletes %>%
   filter(!is.na(Medal))%>%
   select(Name, NOC, Games, Sport, Event, Medal, Year)%>%
@@ -97,6 +99,7 @@ saveRDS(medals, file = "ALL_medals.rds")
 
 
 ```{r}
+#Medals by sex data set for time series graph
 medals_sex <- athletes %>%
   filter(!is.na(Medal))%>%
   select(Name, NOC, Games, Sport, Event, Medal, Sex, Year)%>%
@@ -125,6 +128,10 @@ medals_sex <- athletes %>%
   na_replace(0)
 
 saveRDS(medals_sex, file = "medals_sex.rds")
+
+
+
+Getty Images. (2017). [Photograph of the Olympic Rings]. Reader's Digest. Retrieved May 9, 2023, from https://www.rd.com/wp-content/uploads/2017/08/GettyImages-466313493-MLedit.jpg.
 
 ```
 
