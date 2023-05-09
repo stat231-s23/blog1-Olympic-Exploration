@@ -121,7 +121,7 @@ mapplot<- ggplot(map_data_gdp, aes(x = long, y = lat, group = group, fill = gdp,
 ggplotly(mapplot)
 
 ```
-This map displays Total GDP in 2010 for countries around the world. Lighter shades indicate a lower total GDP, while darker shades represent a higher GDP. Countries such as China, The United States of America, and Japan are among the countries with the highest Total GDP. Users can hover over the country of their choice to identify the country's name and its Total GDP.
+This map displays Total GDP in 2010 for countries around the world. Lighter shades indicate a lower total GDP, while darker shades represent a higher GDP. Countries such as China, The United States of America, and Japan are among the countries with the highest Total GDP. Users can hover over the country of their choice to identify the country's name and its Total GDP. They can zoom in on the map by dragging the mouse over the desired area.
 
 ### Population
 ```{r}
@@ -136,15 +136,17 @@ ggplotly(mapplot2)
 
 ```
 
-This map displays populations for countries around the world in 2010. Lighter shades indicate a relatively low population, while dark shades indicate a relatively high population. China and India are among the countries with the highest total population by a considerable margin. Users can hover over the country of their choice to identify the country's name and its population.
+This map displays populations for countries around the world in 2010. Lighter shades indicate a relatively low population, while dark shades indicate a relatively high population. China and India are among the countries with the highest total population by a considerable margin. Users can hover over the country of their choice to identify the country's name and its population. They can zoom in on the map by dragging the mouse over the desired area.
+
+
 
 ## {-}
 
-## Map of Medals won in 2016 Olympics by Population
+## Map of Medals won in 2016 Olympics per Population in Millions
 
 ```{r}
 #Medals won in 2016 Olympics by Population
-mapplot5 <- ggplot(map_data_gdp3, aes(x = long, y = lat, group = group, fill = MedalsPer100000, text = region)) +
+mapplot5 <- ggplot(map_data_gdp3, aes(x = long, y = lat, group = group, fill = MedalsPer1000000, text = region)) +
   geom_polygon(color = "black") +
   scale_fill_viridis(option = "plasma", direction = -1) + 
   theme_void() +
@@ -153,8 +155,14 @@ mapplot5 <- ggplot(map_data_gdp3, aes(x = long, y = lat, group = group, fill = M
 ggplotly(mapplot5)
 ```
 
-This map displays the medals won in the 2016 Olympics versus the population of countries around the world in 2016. Lighter shades indicate a relatively low number of medals when compared to the population, while dark shades indicate a high number of medals when compared to the population. Grey represents the countries who did not win medals during the 2016 Olympics. Georgia, Azerbaijan, and Denmark are among the countries with the highest number of medals in context of their populations. Countries with high GDPs or populations such as the United States, China, Japan, and Brazil all won medals during the Olympics. Users can hover over the countries to view the country's name and Medals won in comparison to their population. The maps were created using ggplot in R.
+This map displays the medals won in the 2016 Olympics versus the population of countries in millions around the world in 2016. Lighter shades indicate a relatively low number of medals when compared to the population, while dark shades indicate a high number of medals when compared to the population. Grey represents the countries who did not win medals during the 2016 Olympics. Georgia, Azerbaijan, and Denmark are among the countries with the highest number of medals in context of their populations. Countries with high GDPs or populations such as the United States, China, Japan, and Brazil all won medals during the Olympics. Users can hover over the countries to view the country's name and Medals won in comparison to their population. They can zoom in on the map by dragging the mouse over the desired area. The maps were created using ggplot in R.
 
+
+## Limitations: 
+
+Ideally we would want to analyze the effect that the variables have on countries' success from the same year, but due to our limited data, we had to use different years for some of our visualizations. For the maps displaying the countries' Total GDP and Population, we only had data up to 2010, while other sections of the blog had data up to 2016.
+
+Many countries like Russia were not represented becuse of our limited data as well. In the future, we would want to look into more comprehensive datasets.
 
 ## Athlete Medal Analysis {.tabset}
 

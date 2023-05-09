@@ -127,8 +127,10 @@ gdp_pop_2016 <- readRDS("2016_gdp_pop.rds")
 
 medalperpop <- gdp_pop_2016 %>%
   select(Country, Total, Population) %>%
+  filter(Country != "Grenada") %>%
   summarise(
     MedalsVsPopulation = Total/Population,
+    MedalsPer1000000 = MedalsVsPopulation*1000000,
     Country = Country
   )
 
