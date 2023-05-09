@@ -1,5 +1,5 @@
 ---
-title: "Olympics"
+title: "Olympic Exploration"
 author: "Olivia DeVol, Nick Addison, Fritz Lalley"
 date: "May 2023"
 output:
@@ -45,16 +45,16 @@ table_info <- gdp_pop_2016%>%
 ```
 
 
-```{r, fig.cap='Olympic Rings', out.width="80%", fig.align="center"}
+```{r, out.width="60%", fig.align="center"}
 knitr::include_graphics("img/olympic_rings.jpeg")
 ```
 
-# Intro
+# Introduction
 
-The Olympics are a worldwide celebration of the best athletes in the world that promotes peace and unity. There are no honors greater for athletes than winning a gold medal for their country. This incredible achievement may be influenced by obvious variables such as physical traits of the athletes, the type of olympics (summer or winter), or variables that one would not think are immediately related to sports. We suspect that factors such as a country's total GDP and Population. We explore if these factors influence the number of medals won in the Olympics in this blog. Our aim is to deepen our understanding of what factors influence a country's success in the games and spread the information in hopes that there may be a solution to even the playing field.
+The Olympics represent a global celebration of the most exceptional athletes worldwide, promoting the values of peace and unity. Winning a gold medal for one's country is the ultimate honor for any athlete. This impressive accomplishment may be attributed to apparent variables, such as an athlete's physical traits or the type of Olympics (summer or winter), as well as less apparent factors. In this blog, we investigate whether a country's total GDP and population impact the number of medals won at the Olympics. Our goal is to enhance our comprehension of the factors that contribute to a country's success in the games and share this information in the hope of leveling the playing field.
 
 
-## USA Medal Exploration
+## USA Medal Count by Type
 
 ```{r}
 #usa medal time graph
@@ -67,9 +67,9 @@ dygraph(all_medals, main = "USA Medals ") %>%
 
 ```
 
-The above medal time graph demonstrates the number of medals that the United States won each year that the Olympics were held. This allows us to see how the United States has performed at the Olympic stage. The graph has very sharp curves up and down which represent the medal differences between the summer and winter olympics. The USA tends to win more medals in the summer Olympics than the Winter olympics.
+The medal time graph above presents the number of medals that the United States has won during each Olympic year, providing insight into the country's performance at the global athletic event. The graph displays steep curves that indicate the fluctuations in medal counts between the summer and winter Olympics. The United States tends to win more medals during the summer Olympics compared to the winter Olympics. It is essential to note the outliers of this trend, such as the 1904 Olympics held in St. Louis, MO. During these games, the majority of the athletes were Americans, resulting in the US winning a significant number of medals. This was also due to limited transportation options at the time, as boats were the primary mode of travel for most countries to reach the games. Another peak in medal count can be observed during the 1984 Summer Olympics held in Los Angeles, CA, as many communist nations (e.g., Soviet Union) boycotted the games, providing the United States with a greater opportunity to secure more medals.
 
-## USA Medal Exploration by Gender
+## USA Medal Count by Gender
 
 ```{r}
 dygraph(medals_sex, main = "USA Medals by Gender (1896-2016)") %>%
@@ -80,27 +80,27 @@ dygraph(medals_sex, main = "USA Medals by Gender (1896-2016)") %>%
 
 ```
 
-Olivia will explain this graph
-
+The medal time graph above illustrates the historical medal count for USA Females and USA Males in the Olympics. While the graph indicates that men have won more medals than women, it is crucial to note the distinction between the two lines. Although the blue line (representing Men) is generally above the pink line (representing Women), over time, the gap between the two lines has narrowed. This indicates that in the late 1900s, the performance of men and women in terms of medaling became more similar. In contrast, during the early 1900s, American Men dominated the majority of US medals. This trend signifies the emergence of women in athletics at the international level.
 
 
 ## 2016 Olympic Data Analysis
 
 ```{r}
-#2016 olympics example
+#2016 Olympics example
 
 p <- gdp_pop_2016 %>%
   ggplot(aes(x = gdp, y = Total, size = Population, text = Country )) +
   geom_point()+
-  labs(
-      title = "2016 Olympics Data",
-      subtitle = "GDP, Population, Total Medals",
+  labs(subtitle = "GDP, Population, Total Medals",
       y = "Total Medals at 2016 Games",
       x = "GDP")
 
 ggplotly(p)
 
-datatable(table_info, colnames = c('Country Name', 'Medal Count', 'GDP', 'Population'))
+datatable(table_info, colnames = c('Country Name',
+                                   'Medal Count', 
+                                   'GDP', 'Population'), 
+          options = list(pageLength = 5))
 
 ```
 
@@ -137,17 +137,16 @@ ggplotly(mapplot2)
 ```
 
 This map displays populations for countries around the world in 2010. Lighter shades indicate a relatively low population, while dark shades indicate a relatively high population. China and India are among the countries with the highest total population by a considerable margin. Users can hover over the country of their choice to identify the country's name and its population.
+
 ## {-}
 
-
-## Population and Medals won in 2016 Olympics
+## Map of Medals won in 2016 Olympics by Population
 
 ```{r}
-#Medals won in 2016 Olympics vs Population
+#Medals won in 2016 Olympics by Population
 mapplot5 <- ggplot(map_data_gdp3, aes(x = long, y = lat, group = group, fill = MedalsPer100000, text = region)) +
   geom_polygon(color = "black") +
   scale_fill_viridis(option = "plasma", direction = -1) + 
-  ggtitle("Medals Vs. Population in 2016") +
   theme_void() +
   theme(legend.position = "bottom")
 
@@ -157,33 +156,42 @@ ggplotly(mapplot5)
 This map displays the medals won in the 2016 Olympics versus the population of countries around the world in 2016. Lighter shades indicate a relatively low number of medals when compared to the population, while dark shades indicate a high number of medals when compared to the population. Grey represents the countries who did not win medals during the 2016 Olympics. Georgia, Azerbaijan, and Denmark are among the countries with the highest number of medals in context of their populations. Countries with high GDPs or populations such as the United States, China, Japan, and Brazil all won medals during the Olympics. Users can hover over the countries to view the country's name and Medals won in comparison to their population. The maps were created using ggplot in R.
 
 
-
 ## Athlete Medal Analysis {.tabset}
 
 ```{r}
 ggplot(athletes_medals, aes(x = cluster, fill = Medal)) +
-  labs(title="K-means Clustering for Athletes", x="Cluster", y="Count")+
+  labs(title="K-means Clustering for All Athletes", x="Cluster", y="Count")+
   scale_fill_manual(values=c("gold3", "gray88", "burlywood4")) +
   geom_bar() +
   theme_classic()
 
 ```
   
-### Height   
+### Height (All Athletes)  
 ```{r}  
 mosaic::favstats(Height ~ cluster, data = athletes_medals)%>%
+  select(-missing)%>%
   as.data.frame()%>%
-  kable(digits = 2)
+  kable(digits = 2, col.names = c('Cluster', 'Minimum (cm)', 'Q1 (cm)', 'Median (cm)', 'Q3 (cm)', 'Maximum (cm)', 'Mean (cm)', 'Standard Deviation (cm)', 'Count'))
 ```
 
-### Weight 
+### Weight (All Athletes)
 ```{r}  
 mosaic::favstats(Weight ~ cluster, data = athletes_medals)%>%
+  select(-missing)%>%
   as.data.frame()%>%
-  kable(digits = 2)
+  kable(digits = 2, col.names = c('Cluster', 'Minimum (kg)', 'Q1 (kg)', 'Median (kg)', 'Q3 (kg)', 'Maximum (kg)', 'Mean (kg)', 'Standard Deviation (kg)', 'Count'))
 ```
 
-### US Athletes
+The goal here is to observe how height and weight may hold an impact on whether or not an athlete will be successful in the olympics. For the dataset containing all athletes, the 3rd cluster observed the most medaling. From this, we can conclude that the middle third of athletes by height and weight are more likely to medal than the upper and lower thirds. In a similar vein, the lowest third of athletes by height and weight are more likely to medal than the highest third. Generally speaking, athletes in the middle ground in terms of height and wight have been, historically, more successful at the Olympics than others. 
+
+Similarly, we can observe individual types of medals across these three clusters. The same trend I described before is generally true for each type of medal, with the middle ground height and weight athletes winning the most gold, silver, and bronze medals. Though, the difference between the first two clusters is much less major. 
+
+
+
+## {-}
+
+## US Athlete Medal Analysis {.tabset}
 ```{r}
 ggplot(athletes_american_medals, aes(x = cluster, fill = Medal)) +
   labs(title="K-means Clustering for American Athletes", x="Cluster", y="Count")+
@@ -192,40 +200,34 @@ ggplot(athletes_american_medals, aes(x = cluster, fill = Medal)) +
   theme_classic()
 ```
 
-### Height
+### Height (US Athletes)
 ```{r}
 mosaic::favstats(Height ~ cluster, data = athletes_american_medals) %>%
   select(-missing) %>%
   as.data.frame() %>%
-  kable(digits = 2)
+  kable(digits = 2, col.names = c('Cluster', 'Minimum (cm)', 'Q1 (cm)', 'Median (cm)', 'Q3 (cm)', 'Maximum (cm)', 'Mean (cm)', 'Standard Deviation (cm)', 'Count'))
 ```
 
-### Weight
+### Weight (US Athletes)
 ```{r}
 mosaic::favstats(Weight ~ cluster, data = athletes_american_medals) %>%
 select(-missing) %>%
   as.data.frame() %>%
-  kable(digits = 2)
+  kable(digits = 2, col.names = c('Cluster', 'Minimum (kg)', 'Q1 (kg)', 'Median (kg)', 'Q3 (kg)', 'Maximum (kg)', 'Mean (kg)', 'Standard Deviation (kg)', 'Count'))
 ```
-
-## {-}
-
-These bar graphs pull from a dataset containing every Olympic medal winner in the competition's history (since data collection began). As you can see, the data is clustered. I clustered the data by height and weight, and measured the total medal count for each cluster, separated by the type of medal. The first bargrah displays all athletss, where as the second bar graph only displays American athletes. 
-
-## All Athletes Clustered
-The goal here is to observe how height and weight may hold an impact on whether or not an athlete will be successful in the olympics. For the dataset containing all athletes, the 3rd cluster observed the most medaling. From this, we can conclude that the middle third of athletes by height and weight are more likely to medal than the upper and lower thirds. In a similar vein, the lowest third of athletes by height and weight are more likely to medal than the highest third. Generally speaking, athletes in the middle ground in terms of height and wight have been, historically, more successful at the Olympics than others. 
-
-Similarly, we can observe individual types of medals across these three clusters. The same trend I described before is generally true for each type of medal, with the middle ground height and weight athletes winning the most gold, silver, and bronze medals. Though, the difference between the first two clusters is much less major. 
-
-## American Athletes Clustered
 
 The same trend observed in the prior bar graph remains true here. For american athletes, the 1st cluster contains the most medaling. As before, this is the middle third of athletes clustered by height and weight. 
 
 Limiting the data to only include american athletes may give more credence to the initial observation that athletes who fall into that middle ground in terms of height and weight have historically been the most successful athletes. 
 
+## {-}
+
+These bar graphs pull from a data set containing every Olympic medal winner in the competition's history (since data collection began). As you can see, the data is clustered. I clustered the data by height and weight, and measured the total medal count for each cluster, separated by the type of medal. The first bar graph displays all athletes, where as the second bar graph only displays American athletes. 
+
+
 ## Limitations:
 
-First off, different sports call for different types of physical builds. For example, a power lifter competing in the olympics needs to be big. On the contrary, a gymnast needs to be much lighter and lean, and in reality, they are often times much shorter as well. These physical traits give athletes competitive advantages in their own sports, therefore, it would be unfair to assert that one specific type of height and weight caters to the most success. Overall, that may be the case, however once you analyze these sports as individuals we see that these clusters don't give us as definitive results. 
+First off, different sports call for different types of physical builds. For example, a power lifter competing in the Olympics needs to be big. On the contrary, a gymnast needs to be much lighter and lean, and in reality, they are often times much shorter as well. These physical traits give athletes competitive advantages in their own sports, therefore, it would be unfair to assert that one specific type of height and weight caters to the most success. Overall, that may be the case, however once you analyze these sports as individuals we see that these clusters don't give us as definitive results. 
 
 Similarly, we can not account for those athletes who compete as individuals versus those who compete as apart of a team. A gymnast, for example, competes as an individual. These athletes only rely on themselves for success during the competition. On the other hand, a basketball athlete relies on themselves as well as their teammates. Additionally, athletes on a team potentially fill certain physical builds that complement the builds of their teammates. On a basketball team, you will have a point-guard who are typically shorter and lighter along with a center who are typically taller and heavier. So, the fact that we are unable to distinguish between team athletes and individual athletes is another limitation of our k-means clustering analysis. 
 
