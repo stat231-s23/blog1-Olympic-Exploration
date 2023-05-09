@@ -15,7 +15,6 @@ athletes <- read_csv("athlete_events.csv")
 noc <- read_csv("noc_regions.csv")
 
 
-
 #KMEANS CLUSTERING FOR Height and Weight, color the points by medal.
 
 athletes <- athletes %>% 
@@ -39,6 +38,7 @@ athletes_numeric <- athletes %>%
 
 # Scale the numeric variables
 athletes_scaled <- scale(athletes_numeric)
+
 
 # K-means clustering for height and weight
 set.seed(123) # for reproducibility
@@ -68,6 +68,54 @@ ggplot(athletes_medals, aes(x = cluster, fill = Medal)) +
   
 mosaic::favstats(Height ~ cluster, data = athletes_medals)
 mosaic::favstats(Weight ~ cluster, data = athletes_medals)
+
+# Just US Athletes
+athletes_american <- athletes %>%
+  filter(NOC == "USA") %>%
+  filter(!is.na(Medal))
+# Convert the medal type column to a factor variable
+athletes_american$Medal <- factor(athletes_american$Medal)
+
+athletes_american <- athletes_american %>%
+  mutate(medalInd = case_when(Medal == "Gold" ~ 1,
+                   Medal == "Silver" ~ 2,
+                   Medal == "Bronze" ~ 3))
+## Filter out missing data
+athletes_american <- athletes_american[complete.cases(athletes_american), ]
+
+# Filter out non-numeric variables
+athletes_american_numeric <- athletes_american %>%
+  select_if(is.numeric)
+
+# Scale the numeric variables
+athletes_american_scaled <- scale(athletes_american_numeric)
+# K-means clustering for height and weight
+set.seed(150) # for reproducibility
+k <- 3 # number of clusters
+kmeans_american_fit <- kmeans(athletes_american_scaled[,c("Height", "Weight")], centers = k)
+
+# Add the cluster labels to the original dataset
+athletes_american$cluster <- as.factor(kmeans_american_fit$cluster)
+    
+athletes_american_medals <- athletes_american %>%
+  mutate(Medal = factor(Medal, level = c("Gold", "Silver", "Bronze")))
+
+saveRDS(athletes_medals, file = "athletes_american_medals.rds")
+
+# Plot the American clusters with medal color
+ggplot(athletes_american, aes(x=Height, y=Weight, color=Medal, shape=cluster)) + 
+  geom_point(size=3) +
+  scale_color_manual(values=c("gold3", "gray88", "burlywood4")) +
+  labs(title="K-means Clustering for American Athletes", x="Height (scaled)", y="Weight (scaled)")
+  theme_economist()
+  
+ggplot(athletes_american_medals, aes(x = cluster, fill = Medal)) +
+  labs(title="K-means Clustering for American Athletes", x="Cluster", y="Count")+
+  scale_fill_manual(values=c("gold3", "gray88", "burlywood4")) +
+  geom_bar()
+  
+mosaic::favstats(Height ~ cluster, data = athletes_american_medals)
+mosaic::favstats(Weight ~ cluster, data = athletes_american_medals)
 
 ```
 
