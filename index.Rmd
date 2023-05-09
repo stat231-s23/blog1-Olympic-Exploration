@@ -37,6 +37,7 @@ map_data_gdp2 <- readRDS("map_data_gdp2.rds")
 map_data_gdp3 <- readRDS("map_data_gdp3.rds")
 gdp_pop_2016 <- readRDS("2016_gdp_pop.rds")
 athletes_medals <- readRDS("athletes_medals.rds")
+athletes_american_medals <- readRDS("athletes_american_medals.rds")
 
 table_info <- gdp_pop_2016%>%
   select(Country, Total, gdp, Population)
@@ -163,7 +164,8 @@ This map displays the medals won in the 2016 Olympics versus the population of c
 ggplot(athletes_medals, aes(x = cluster, fill = Medal)) +
   labs(title="K-means Clustering for Athletes", x="Cluster", y="Count")+
   scale_fill_manual(values=c("gold3", "gray88", "burlywood4")) +
-  geom_bar()
+  geom_bar() +
+  theme_classic()
 
 ```
   
@@ -186,7 +188,8 @@ mosaic::favstats(Weight ~ cluster, data = athletes_medals)%>%
 ggplot(athletes_american_medals, aes(x = cluster, fill = Medal)) +
   labs(title="K-means Clustering for American Athletes", x="Cluster", y="Count")+
   scale_fill_manual(values=c("gold3", "gray88", "burlywood4")) +
-  geom_bar()
+  geom_bar() +
+  theme_classic()
 ```
 
 ### Height
@@ -220,7 +223,7 @@ The same trend observed in the prior bar graph remains true here. For american a
 
 Limiting the data to only include american athletes may give more credence to the initial observation that athletes who fall into that middle ground in terms of height and weight have historically been the most successful athletes. 
 
-Limitations:
+## Limitations:
 
 First off, different sports call for different types of physical builds. For example, a power lifter competing in the olympics needs to be big. On the contrary, a gymnast needs to be much lighter and lean, and in reality, they are often times much shorter as well. These physical traits give athletes competitive advantages in their own sports, therefore, it would be unfair to assert that one specific type of height and weight caters to the most success. Overall, that may be the case, however once you analyze these sports as individuals we see that these clusters don't give us as definitive results. 
 
