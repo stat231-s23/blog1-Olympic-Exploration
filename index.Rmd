@@ -164,13 +164,38 @@ mosaic::favstats(Weight ~ cluster, data = athletes_medals)%>%
   as.data.frame()%>%
   kable(digits = 2)
 ```
+
+### US Athletes
+```{r}
+ggplot(athletes_american_medals, aes(x = cluster, fill = Medal)) +
+  labs(title="K-means Clustering for American Athletes", x="Cluster", y="Count")+
+  scale_fill_manual(values=c("gold3", "gray88", "burlywood4")) +
+  geom_bar()
+```
+
+### Height
+```{r}
+mosaic::favstats(Height ~ cluster, data = athletes_american_medals) %>%
+  select(-missing) %>%
+  as.data.frame() %>%
+  kable(digits = 2)
+```
+
+### Weight
+```{r}
+mosaic::favstats(Weight ~ cluster, data = athletes_american_medals) %>%
+select(-missing) %>%
+  as.data.frame() %>%
+  kable(digits = 2)
+```
+
 ## {-}
 
 This bar graph pulls from a dataset containing every Olympic medal winner in the competition's history (since data collection began). As you can see, the data is clustered. I clustered the data by height and weight, and measured the total medal count for each cluster, separated by the type of medal. 
 
-The goal here is to observe how height and weight may hold an impact on whether or not an athlete will be successful in the olympics. Evidently, the 1st and 3rd clusters observed the most medaling. From this, we can conclude that the highest third of athletes by height and weight are more likely to medal than other shorter and lighter athletes. In a similar vein, the lowest third of athletes by height and weight are more likely to medal than the middle third. 
+The goal here is to observe how height and weight may hold an impact on whether or not an athlete will be successful in the olympics. Evidently, the 3rd cluster observed the most medaling. From this, we can conclude that the middle third of athletes by height and weight are more likely to medal than the upper and lower thirds. In a similar vein, the lowest third of athletes by height and weight are more likely to medal than the highest third. Generally speaking, athletes in the middle ground in terms of height and wight have been, historically, more successful at the Olympics than others. 
 
-Similarly, we can observe individual types of medals across these three clusters. The same trend I described before is generally true for each type of medal, with the heaviest and tallest athletes winning the most gold, silver, and bronze medals. Though, the difference between the first two clusters is much less major. 
+Similarly, we can observe individual types of medals across these three clusters. The same trend I described before is generally true for each type of medal, with the middle ground height and weight athletes winning the most gold, silver, and bronze medals. Though, the difference between the first two clusters is much less major. 
 
 
 
