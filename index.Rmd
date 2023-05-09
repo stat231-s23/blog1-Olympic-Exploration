@@ -31,6 +31,7 @@ library(kableExtra)
 ```{r}
 #Import data
 all_medals <- readRDS("ALL_medals.rds") 
+medals_sex <- readRDS("medals_sex.rds")
 map_data_gdp <- readRDS("map_data_gdp.rds")
 map_data_gdp2 <- readRDS("map_data_gdp2.rds")
 map_data_gdp3 <- readRDS("map_data_gdp3.rds")
@@ -66,6 +67,21 @@ dygraph(all_medals, main = "USA Medals ") %>%
 ```
 
 The above medal time graph demonstrates the number of medals that the United States won each year that the Olympics were held. This allows us to see how the United States has performed at the Olympic stage. The graph has very sharp curves up and down which represent the medal differences between the summer and winter olympics. The USA tends to win more medals in the summer Olympics than the Winter olympics.
+
+## USA Medal Exploration by Gender
+
+```{r}
+dygraph(medals_sex, main = "USA Medals by Gender (1896-2016)") %>%
+  dySeries("M", label = "Male", color = "blue") %>%
+  dySeries("F", label = "Female", color = "pink") %>%
+  dyRangeSelector(height = 20)
+
+
+```
+
+Olivia will explain this graph
+
+
 
 ## 2016 Olympic Data Analysis
 

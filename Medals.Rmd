@@ -8,6 +8,7 @@ library(tidyverse)
 library(kableExtra)
 library(tinytex)
 library(htmltools)
+library(imputeTS)
 
 
 athletes <- read_csv("athlete_events.csv")
@@ -119,19 +120,11 @@ medals_sex <- athletes %>%
   group_by(time, Sex)%>%
   summarise(
     Total = sum(Gold + Silver + Bronze)
-  )
-
+  )%>%
+  pivot_wider(names_from = Sex, values_from = Total)%>%
+  na_replace(0)
 
 saveRDS(medals_sex, file = "medals_sex.rds")
 
-```
-
-
-```{r}
-dygraph(medals_sex, main = "USA Medals by Sex ") %>%
-  dySeries("Gold", label = "Gold", color = "gold") %>%
-  dySeries("Silver", label = "Silver", color = "grey") %>%
-  dySeries("Bronze", label = "Bronze", color = "brown") %>%
-  dyRangeSelector(height = 20)
 ```
 
